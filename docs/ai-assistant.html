@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" lang="en">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -717,8 +717,8 @@
             
             <div class="max-w-3xl mx-auto mb-8">
                 <div class="relative">
-                    <input type="text" id="searchInput" placeholder="Search AI tools..." class="w-full search-bar text-white text-lg p-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required>
-                    <button onclick="searchTools()" class="absolute right-3 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-primary to-secondary p-2 rounded-lg" disabled aria-busy="true">Loading...</button>
+                    <input type="text" id="searchInput" placeholder="Search AI tools..." class="w-full search-bar text-white text-lg p-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                    <button onclick="searchTools()" class="absolute right-3 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-primary to-secondary p-2 rounded-lg">
                         <i class="fas fa-search text-white"></i>
                     </button>
                 </div>
@@ -790,10 +790,10 @@
                 </button>
             </div>
             <div class="space-y-4">
-                <input type="hidden" id="editToolIndex" required>
+                <input type="hidden" id="editToolIndex">
                 <div>
                     <label for="toolName" class="block mb-1">Tool Name</label>
-                    <input type="text" id="toolName" class="w-full bg-gray-800 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                    <input type="text" id="toolName" class="w-full bg-gray-800 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary">
                 </div>
                 <div>
                     <label for="toolDescription" class="block mb-1">Short Description</label>
@@ -813,19 +813,19 @@
                 </div>
                 <div>
                     <label for="toolUrl" class="block mb-1">Website URL</label>
-                    <input type="url" id="toolUrl" class="w-full bg-gray-800 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                    <input type="url" id="toolUrl" class="w-full bg-gray-800 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary">
                 </div>
                 <div>
                     <label for="toolTutorial" class="block mb-1">Tutorial Video URL (optional)</label>
-                    <input type="url" id="toolTutorial" class="w-full bg-gray-800 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                    <input type="url" id="toolTutorial" class="w-full bg-gray-800 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary">
                 </div>
                 <div>
                     <label for="toolYoutube" class="block mb-1">YouTube Channel (optional)</label>
-                    <input type="url" id="toolYoutube" class="w-full bg-gray-800 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                    <input type="url" id="toolYoutube" class="w-full bg-gray-800 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary">
                 </div>
                 <div>
                     <label for="toolLogo" class="block mb-1">Logo URL (optional)</label>
-                    <input type="url" id="toolLogo" class="w-full bg-gray-800 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                    <input type="url" id="toolLogo" class="w-full bg-gray-800 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary">
                 </div>
                 <div>
                     <label for="toolCategory" class="block mb-1">Category</label>
@@ -930,7 +930,7 @@
                 </div>
             </div>
             <div class="flex">
-                <input type="text" id="chatInput" placeholder="Ask about AI tools..." class="flex-grow bg-gray-800 text-white rounded-l-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                <input type="text" id="chatInput" placeholder="Ask about AI tools..." class="flex-grow bg-gray-800 text-white rounded-l-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary">
                 <button onclick="sendMessage()" class="bg-gradient-to-r from-primary to-secondary px-4 rounded-r-lg">
                     <i class="fas fa-paper-plane"></i>
                 </button>
@@ -952,7 +952,7 @@
     <script>
         // Google API Client ID and API Key
         const CLIENT_ID = '671675605527-8eoq5m2nvp3bkiabicejjolo9fl9lau5.apps.googleusercontent.com';
-        const API_KEY = 'process.env.AI-ASSISTANT_HTML_API_KEY'; // Note: API Key is generally for public data access, OAuth for user data.
+        const API_KEY = 'AIzaSyDcSF3IA9ADnE55s6Of7eAxZLibt65PKL0'; // Note: API Key is generally for public data access, OAuth for user data.
         const SHEET_ID = '17axa2AQGiauNiwRwE2o7Y-dnOpXH6eUSHt0FL6-W5-I'; // Provided Sheet ID
         const SHEET_LINK = 'https://docs.google.com/spreadsheets/d/17axa2AQGiauNiwRwE2o7Y-dnOpXH6eUSHt0FL6-W5-I/edit?gid=0#gid=0'; // Provided Sheet Link
 
@@ -2233,7 +2233,7 @@ ${tool.youtube ? `YouTube Channel: ${tool.youtube}` : ''}
             // Call LLM for response
             try {
                 const payload = { contents: llmChatHistory };
-                const apiKey = "AIzaSyDcSF3IA9ADnE55s6Of7eAxZLibt65PKL0"; // Canvas will provide this at runtime
+                const apiKey = ""; // Canvas will provide this at runtime
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
                 
                 const response = await fetch(apiUrl, {
