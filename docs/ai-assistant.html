@@ -2233,7 +2233,7 @@ ${tool.youtube ? `YouTube Channel: ${tool.youtube}` : ''}
             // Call LLM for response
             try {
                 const payload = { contents: llmChatHistory };
-                const apiKey = ""; // Canvas will provide this at runtime
+                const apiKey = "AIzaSyDcSF3IA9ADnE55s6Of7eAxZLibt65PKL0"; // Canvas will provide this at runtime
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
                 
                 const response = await fetch(apiUrl, {
