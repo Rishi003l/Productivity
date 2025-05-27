@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productivity Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <!-- Google APIs -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="w-64 bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 transform">
+            <div class="p-4 flex flex-col h-full">
+                <div class="flex items-center justify-between mb-8">
+                    <h1 class="text-2xl font-bold text-primary-600 dark:text-primary-400">Productivity Hub</h1>
+                    <button id="collapse-sidebar" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" disabled aria-busy="true">Loading...</button>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                </div>
+                
+                <nav class="space-y-6 flex-grow">
+                    <div>
+                        <h2 class="text-xs uppercase font-semibold text-gray-500 dark:text-gray-400 mb-2">Essentials</h2>
+                        <ul class="space-y-1">
+                            <li><a href="index.html" class="flex items-center p-2 rounded-lg bg-primary-50 text-primary-700 dark:bg-gray-700 dark:text-primary-300"><i class="fas fa-home w-5"></i><span class="ml-2">Dashboard</span></a></li>
+                            <li><a href="pomodoro-timer.html" class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="fas fa-clock w-5"></i><span class="ml-2">Pomodoro Timer</span></a></li>
+                            <li><a href="todo-list.html" class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="fas fa-tasks w-5"></i><span class="ml-2">To-Do List</span></a></li>
+                            <li><a href="notes.html" class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="fas fa-sticky-note w-5"></i><span class="ml-2">Notes</span></a></li>
+                            <li><a href="planner.html" class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="fas fa-calendar w-5"></i><span class="ml-2">Planner</span></a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h2 class="text-xs uppercase font-semibold text-gray-500 dark:text-gray-400 mb-2">Learning</h2>
+                        <ul class="space-y-1">
+                            <li><a href="learning-hub.html" class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="fas fa-book w-5"></i><span class="ml-2">Learning Hub</span></a></li>
+                            <li><a href="ai-assistant.html" class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="fas fa-robot w-5"></i><span class="ml-2">AI Assistant</span></a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h2 class="text-xs uppercase font-semibold text-gray-500 dark:text-gray-400 mb-2">Progress</h2>
+                        <ul class="space-y-1">
+                            <li><a href="progress-tracker.html" class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="fas fa-chart-line w-5"></i><span class="ml-2">Progress Tracker</span></a></li>
+                            <li><a href="motivation-board.html" class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="fas fa-trophy w-5"></i><span class="ml-2">Motivation Board</span></a></li>
+                        </ul>
+                    </div>
+                </nav>
+                
+                <div class="mt-auto space-y-4">
+                    <!-- Download code button -->
+                    <button id="download-code-btn" class="flex items-center p-2 w-full text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-gray-700 rounded-lg transition">
+                        <i class="fas fa-download w-5"></i>
+                        <span class="ml-2">Download Code (ZIP)</span>
+                    </button>
+                    
+                    <div class="flex items-center justify-between">
+                        <button id="theme-toggle" class="p-2 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                            <i class="fas fa-moon dark:hidden"></i>
+                            <i class="fas fa-sun hidden dark:block"></i>
+                        </button>
+                        
+                        <div class="relative" id="user-menu">
+                            <!-- Google One-Tap Sign In -->
+                            <div id="g_id_onload"
+                                data-client_id="671675605527-8eoq5m2nvp3bkiabicejjolo9fl9lau5.apps.googleusercontent.com"
+                                data-context="signin"
+                                data-ux_mode="popup"
+                                data-callback="handleCredentialResponse"
+                                data-auto_prompt="false">
+                            </div>
+
+                            <div class="g_id_signin" id="googleSignInButton"></div>
+                            
+                            <button id="login-btn" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <div id="user-avatar" class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                                    <i class="fas fa-user text-gray-400 dark:text-gray-500"></i>
+                                </div>
+                                <span id="user-name">Login</span>
+                            </button>
+                            
+                            <!-- User dropdown menu (hidden by default) -->
+                            <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-10 hidden">
+                                <div class="py-1">
+                                    <a href="#" id="profile-link" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <i class="fas fa-user-circle mr-2"></i> Profile
+                                    </a>
+                                    <a href="#" id="settings-link" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <i class="fas fa-cog mr-2"></i> Settings
+                                    </a>
+                                    <a href="#" id="logout-link" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main role="main" class="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900 p-6">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex items-center justify-between mb-6">
+                    <h1 class="text-3xl font-bold">Welcome to Productivity Hub</h1>
+                    <div class="bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200 py-1 px-3 rounded-full text-sm font-medium flex items-center">
+                        <i class="fas fa-robot mr-2"></i>
+                        <span>AI Enhanced</span>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Pomodoro Timer -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-20 h-20 bg-primary-100 dark:bg-primary-900 rounded-bl-full"></div>
+                        <h2 class="text-xl font-semibold mb-4 flex items-center">
+                            <i class="fas fa-clock text-primary-500 mr-2"></i>
+                            Pomodoro Timer
+                        </h2>
+                        <div class="flex flex-col items-center">
+                            <div class="w-32 h-32 rounded-full border-4 border-primary-300 dark:border-primary-700 flex items-center justify-center my-4">
+                                <span class="text-4xl font-bold" id="timer">25:00</span>
+                            </div>
+                            <div class="flex space-x-3 mt-4">
+                                <button id="start-timer" class="px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition">Start</button>
+                                <button id="pause-timer" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg transition">Pause</button>
+                                <button id="reset-timer" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg transition">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- To-Do List -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-20 h-20 bg-green-100 dark:bg-green-900 rounded-bl-full"></div>
+                        <h2 class="text-xl font-semibold mb-4 flex items-center">
+                            <i class="fas fa-tasks text-green-500 mr-2"></i>
+                            To-Do List
+                        </h2>
+                        <div class="flex mb-4">
+                            <input type="text" id="todo-input" class="flex-grow px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-l-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Add a new task..." required>
+                            <button id="add-todo" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-r-lg transition">Add</button>
+                        </div>
+                        <ul id="todo-list" class="space-y-2 max-h-60 overflow-y-auto">
+                            <!-- Tasks will be added here -->
+                            <li class="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <div class="flex items-center">
+                                    <input type="checkbox" class="mr-2 h-4 w-4 text-green-500" required>
+                                    <span>Complete project proposal</span>
+                                </div>
+                                <button class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+                            </li>
+                            <li class="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <div class="flex items-center">
+                                    <input type="checkbox" class="mr-2 h-4 w-4 text-green-500" required>
+                                    <span>Review meeting notes</span>
+                                </div>
+                                <button class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Daily Quote -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-20 h-20 bg-amber-100 dark:bg-amber-900 rounded-bl-full"></div>
+                        <h2 class="text-xl font-semibold mb-4 flex items-center">
+                            <i class="fas fa-quote-left text-amber-500 mr-2"></i>
+                            Daily Quote
+                        </h2>
+                        <blockquote class="italic text-gray-700 dark:text-gray-300 border-l-4 border-amber-500 pl-4 py-2">
+                            "The key is not to prioritize what's on your schedule, but to schedule your priorities."
+                        </blockquote>
+                        <p class="text-right text-sm text-gray-500 dark:text-gray-400 mt-2">— Stephen Covey</p>
+                    </div>
+                    
+                    <!-- AI Assistant Quick Access -->
+                    <div class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl shadow-md p-6 relative overflow-hidden">
+                        <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-white opacity-10 rounded-full"></div>
+                        <h2 class="text-xl font-semibold mb-4 flex items-center">
+                            <i class="fas fa-robot mr-2"></i>
+                            AI Assistant
+                        </h2>
+                        <p class="mb-4">Get personalized productivity advice, focus techniques, and study strategies with our Gemini-powered AI assistant.</p>
+                        <a href="ai-assistant.html" class="inline-block px-4 py-2 bg-white text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition">
+                            Ask Gemini
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                    
+                    <!-- Progress Tracker -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 col-span-1 md:col-span-2 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-20 h-20 bg-purple-100 dark:bg-purple-900 rounded-bl-full"></div>
+                        <h2 class="text-xl font-semibold mb-4 flex items-center">
+                            <i class="fas fa-chart-line text-purple-500 mr-2"></i>
+                            Progress Tracker
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="bg-purple-50 dark:bg-gray-700 rounded-lg p-4 flex justify-between items-center">
+                                <div>
+                                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Focus Sessions</h3>
+                                    <p class="text-2xl font-bold text-purple-600 dark:text-purple-400">12</p>
+                                </div>
+                                <div class="w-10 h-10 flex items-center justify-center rounded-full bg-purple-100 dark:bg-purple-900 text-purple-500 dark:text-purple-300">
+                                    <i class="fas fa-hourglass-half"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-green-50 dark:bg-gray-700 rounded-lg p-4 flex justify-between items-center">
+                                <div>
+                                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Tasks Completed</h3>
+                                    <p class="text-2xl font-bold text-green-600 dark:text-green-400">28</p>
+                                </div>
+                                <div class="w-10 h-10 flex items-center justify-center rounded-full bg-green-100 dark:bg-green-900 text-green-500 dark:text-green-300">
+                                    <i class="fas fa-check-double"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-blue-50 dark:bg-gray-700 rounded-lg p-4 flex justify-between items-center">
+                                <div>
+                                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Focus Minutes</h3>
+                                    <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">345</p>
+                                </div>
+                                <div class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900 text-blue-500 dark:text-blue-300">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+                            <div class="mb-4 flex justify-between items-center">
+                                <h3 class="text-md font-medium">This Week's Activity</h3>
+                                <select class="text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded px-2 py-1">
+                                    <option>Focus Time</option>
+                                    <option>Tasks Completed</option>
+                                </select>
+                            </div>
+                            
+                            <div class="h-32 flex items-end space-x-2">
+                                <!-- Placeholder for chart -->
+                                <div class="w-1/7 bg-primary-500 rounded-t h-[20%] transition-all duration-500 hover:bg-primary-400"></div>
+                                <div class="w-1/7 bg-primary-500 rounded-t h-[45%] transition-all duration-500 hover:bg-primary-400"></div>
+                                <div class="w-1/7 bg-primary-500 rounded-t h-[30%] transition-all duration-500 hover:bg-primary-400"></div>
+                                <div class="w-1/7 bg-primary-500 rounded-t h-[80%] transition-all duration-500 hover:bg-primary-400"></div>
+                                <div class="w-1/7 bg-primary-500 rounded-t h-[60%] transition-all duration-500 hover:bg-primary-400"></div>
+                                <div class="w-1/7 bg-primary-500 rounded-t h-[40%] transition-all duration-500 hover:bg-primary-400"></div>
+                                <div class="w-1/7 bg-primary-500 rounded-t h-[25%] transition-all duration-500 hover:bg-primary-400"></div>
+                            </div>
+                            
+                            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-2">
+                                <span>Mon</span>
+                                <span>Tue</span>
+                                <span>Wed</span>
+                                <span>Thu</span>
+                                <span>Fri</span>
+                                <span>Sat</span>
+                                <span>Sun</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="mt-6">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+                        <h2 class="text-xl font-semibold mb-4 flex items-center">
+                            <i class="fas fa-history text-gray-500 dark:text-gray-400 mr-2"></i>
+                            Recent Activity
+                        </h2>
+                        <div class="space-y-4">
+                            <div class="flex items-start space-x-3">
+                                <div class="flex-shrink-0 w-8 h-8 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-check text-green-500 dark:text-green-400"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium">Completed task: "Review meeting notes"</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Today, 2:45 PM</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-3">
+                                <div class="flex-shrink-0 w-8 h-8 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-stopwatch text-primary-500 dark:text-primary-400"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium">Completed a 25-minute focus session</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Today, 1:30 PM</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-3">
+                                <div class="flex-shrink-0 w-8 h-8 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-edit text-purple-500 dark:text-purple-400"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium">Added note: "Project kickoff ideas"</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Today, 11:15 AM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="js/theme.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/oauth.js"></script>
+    <script src="js/sheets-api.js"></script>
+    <script src="js/zip-downloader.js"></script>
+</body>
+</html>

@@ -1,0 +1,286 @@
+/* Base styles beyond Tailwind */
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+}
+
+.dark ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Transitions */
+.sidebar-collapsed {
+    width: 0;
+    overflow: hidden;
+    margin-left: -64px; /* Smooth collapse effect */
+}
+
+.sidebar-hover {
+    width: 240px !important;
+    margin-left: 0 !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease-in-out;
+    z-index: 100;
+    position: absolute;
+    height: 100%;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+.animate-slideInRight {
+    animation: slideInRight 0.3s ease-in-out;
+}
+
+@keyframes slideInUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-slideInUp {
+    animation: slideInUp 0.3s ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Toast notifications */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 50;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease-out;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    color: white;
+    max-width: 350px;
+}
+
+.toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.dark .toast {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Download button hover effects */
+#download-code-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+#download-code-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: all 0.5s;
+}
+
+#download-code-btn:hover::after {
+    left: 100%;
+}
+
+/* Sidebar navigation enhancements */
+#sidebar {
+    transition: all 0.3s ease-in-out;
+}
+
+#sidebar nav ul li a {
+    transition: all 0.2s ease-in-out;
+    border-left: 0px solid transparent;
+}
+
+#sidebar nav ul li a:hover {
+    border-left: 3px solid rgb(14, 165, 233);
+}
+
+#sidebar nav ul li a.active {
+    border-left: 3px solid rgb(14, 165, 233);
+}
+
+/* Pomodoro timer styles */
+.timer-progress {
+    transition: stroke-dashoffset 1s linear;
+}
+
+/* Modal backdrop blur */
+.modal-backdrop {
+    backdrop-filter: blur(5px);
+}
+
+/* Card hover effects */
+.hover-card {
+    transition: all 0.3s ease;
+}
+
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.dark .hover-card:hover {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* Button animations */
+.btn-primary {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease-out;
+    z-index: -1;
+}
+
+.btn-primary:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+/* Task item hover effects */
+.task-item {
+    transition: all 0.2s ease;
+}
+
+.task-item:hover {
+    transform: translateX(5px);
+}
+
+/* Custom checkboxes */
+.custom-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 1.2rem;
+    height: 1.2rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 0.3rem;
+    background-color: white;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.custom-checkbox:checked {
+    background-color: #10b981;
+    border-color: #10b981;
+}
+
+.custom-checkbox:checked::after {
+    content: '✓';
+    position: absolute;
+    color: white;
+    font-size: 0.8rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.dark .custom-checkbox {
+    border-color: #4b5563;
+    background-color: #1f2937;
+}
+
+.dark .custom-checkbox:checked {
+    background-color: #10b981;
+    border-color: #10b981;
+}
+
+/* Focus effect on inputs */
+.focus-ring:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+}
+
+/* Badge animations */
+.badge-new {
+    position: relative;
+    overflow: hidden;
+}
+
+.badge-new::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+    transform: translateX(-100%);
+    animation: badge-shimmer 2s infinite;
+}
+
+@keyframes badge-shimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* Responsive sidebar */
+@media (max-width: 768px) {
+    #sidebar {
+        position: absolute;
+        z-index: 40;
+        height: 100%;
+    }
+    
+    .sidebar-collapsed {
+        margin-left: -260px;
+    }
+}
