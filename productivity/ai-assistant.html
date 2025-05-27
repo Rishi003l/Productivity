@@ -1,0 +1,2391 @@
+<!DOCTYPE html>
+<html lang="en" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Learning Assistants Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables for Theming */
+        :root {
+            --primary: #00f0ff;
+            --secondary: #ff00f0;
+            --dark: #0a0a20;
+            --light: #f0f0ff;
+        }
+        
+        /* Base Body Styles */
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Futuristic Typography */
+        .futuristic-text {
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary);
+        }
+        
+        /* Gradient Text Effect */
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        /* Glow Border Effect */
+        .glow-border {
+            box-shadow: 0 0 15px var(--primary);
+        }
+        
+        /* AI Card Styling */
+        .ai-card {
+            background: rgba(10, 10, 32, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            cursor: pointer;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* AI Card Before Pseudo-element for Gradient Overlay */
+        .ai-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(0, 240, 255, 0.1),
+                rgba(255, 0, 240, 0.1),
+                rgba(0, 240, 255, 0.1)
+            );
+            transform: rotate(45deg);
+            z-index: -1;
+            transition: all 0.5s ease;
+        }
+        
+        /* AI Card Hover Effects */
+        .ai-card:hover {
+            transform: translateY(-10px) rotateX(5deg) scale(1.05);
+            box-shadow: 0 20px 30px rgba(0, 240, 255, 0.3);
+            border-color: var(--primary);
+        }
+        
+        .ai-card:hover::before {
+            top: -100%;
+            left: -100%;
+        }
+        
+        /* Star Rating Display */
+        .star-rating {
+            color: gold;
+            text-shadow: 0 0 5px gold;
+        }
+        
+        /* Search Bar and Theme Selector Styling */
+        .search-bar, .theme-selector {
+            background: rgba(10, 10, 32, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--primary);
+        }
+        
+        /* Floating Chat Button */
+        .floating-chat {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        /* Floating Animation for Chat Button */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        /* Scroll Up Button */
+        .scroll-up {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .scroll-up.visible {
+            opacity: 1;
+        }
+        
+        /* Particle Background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        
+        /* Theme Variations */
+        .theme-tech {
+            --primary: #00f0ff;
+            --secondary: #ff00f0;
+        }
+        
+        .theme-nature {
+            --primary: #00ff9d;
+            --secondary: #00b8ff;
+        }
+        
+        .theme-fire {
+            --primary: #ff6600;
+            --secondary: #ff0066;
+        }
+        
+        .theme-space {
+            --primary: #9d00ff;
+            --secondary: #00ffea;
+        }
+        
+        .theme-dynamic {
+            animation: rainbowTheme 10s linear infinite;
+        }
+        
+        /* Dynamic Theme Rainbow Animation */
+        @keyframes rainbowTheme {
+            0% { --primary: #ff0000; --secondary: #ff00ff; }
+            16% { --primary: #ff00ff; --secondary: #0000ff; }
+            33% { --primary: #0000ff; --secondary: #00ffff; }
+            50% { --primary: #00ffff; --secondary: #00ff00; }
+            66% { --primary: #00ff00; --secondary: #ffff00; }
+            83% { --primary: #ffff00; --secondary: #ff0000; }
+            100% { --primary: #ff0000; --secondary: #ff00ff; }
+        }
+        
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        /* Modal Content */
+        .modal-content {
+            background: rgba(10, 10, 32, 0.95);
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+            position: relative;
+        }
+        
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+        
+        /* Card Detail Modal Specific Styles */
+        .card-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        
+        .card-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .card-modal-content {
+            background: rgba(10, 10, 32, 0.95);
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.8);
+            transition: transform 0.3s;
+            box-shadow: 0 0 40px rgba(0, 240, 255, 0.6);
+            position: relative;
+            padding: 30px;
+        }
+        
+        .card-modal.active .card-modal-content {
+            transform: scale(1);
+        }
+        
+        /* Close Modal Button */
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--light);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .close-modal:hover {
+            background: var(--primary);
+            color: var(--dark);
+        }
+        
+        /* Text Animation for Modals */
+        .animate-text {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+        
+        .animate-text.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Feature List Animation in Modals */
+        .feature-item {
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-item.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        /* Button Hover Effect */
+        .btn-hover-effect {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn-hover-effect::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            z-index: -1;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        
+        .btn-hover-effect:hover::before {
+            transform: scaleX(1);
+        }
+        
+        /* Card Content Layout */
+        .card-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Card Logo Container */
+        .card-logo-container {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .card-logo {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        /* Card Description */
+        .card-description {
+            flex-grow: 1;
+            margin-bottom: 15px;
+        }
+        
+        /* New Features: Price Tag, Footer, Tags, Actions */
+        .price-tag {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            border: 1px solid var(--primary);
+        }
+        
+        .card-footer-section { /* Renamed to avoid conflict with HTML semantic tag */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        
+        .card-tag {
+            background: rgba(0, 240, 255, 0.2);
+            color: var(--primary);
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+        }
+        
+        .card-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .card-action-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .card-action-btn:hover {
+            background: var(--primary);
+            color: var(--dark);
+        }
+        
+        /* Tooltip Styles */
+        .tooltip {
+            position: relative;
+        }
+        
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 120px;
+            background-color: var(--dark);
+            color: var(--light);
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            border: 1px solid var(--primary);
+        }
+        
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Reduced Motion Accessibility */
+        @media (prefers-reduced-motion) {
+            .ai-card, .ai-card:hover, .ai-card.active {
+                transform: none !important;
+                transition: none !important;
+            }
+            
+            .floating-chat {
+                animation: none !important;
+            }
+            
+            .theme-dynamic {
+                animation: none;
+                --primary: #00f0ff;
+                --secondary: #ff00f0;
+            }
+            
+            .animate-text, .feature-item {
+                opacity: 1 !important;
+                transform: none !important;
+                transition: none !important;
+            }
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .card-modal-content {
+                padding: 20px;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+
+            .card-content {
+                padding: 15px;
+            }
+        }
+
+        /* Logo Animation */
+        .logo-animation {
+            animation: floatLogo 3s ease-in-out infinite;
+        }
+        
+        @keyframes floatLogo {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Prompt Buttons for Chat */
+        .prompt-btn {
+            background: rgba(10, 10, 32, 0.7);
+            border: 1px solid var(--primary);
+            border-radius: 20px;
+            padding: 5px 10px;
+            margin: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.8rem;
+        }
+        
+        .prompt-btn:hover {
+            background: var(--primary);
+            color: var(--dark);
+        }
+        
+        /* Main Logo Container and Glow */
+        .logo-container {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            text-align: center;
+        }
+        
+        .main-logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+            animation: floatLogo 3s ease-in-out infinite, glow 2s ease-in-out infinite alternate;
+            display: flex; /* Added for centering the icon */
+            align-items: center; /* Added for centering the icon */
+            justify-content: center; /* Added for centering the icon */
+        }
+
+        /* Style for the Font Awesome icon inside main-logo */
+        .main-logo i {
+            text-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary); /* Added glow effect */
+        }
+        
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 5px var(--primary)); }
+            to { filter: drop-shadow(0 0 20px var(--primary)); }
+        }
+        
+        /* Enhanced Card Badge */
+        .card-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            z-index: 1; /* Ensure it's above other card elements if needed */
+        }
+        
+        /* AI Assistant Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            padding: 10px;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+        
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typingAnimation {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+
+        /* Custom Alert/Confirm Modal */
+        .custom-dialog-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 3000; /* Higher than other modals */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .custom-dialog-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .custom-dialog-content {
+            background: rgba(10, 10, 32, 0.98);
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+        }
+
+        .custom-dialog-overlay.active .custom-dialog-content {
+            transform: scale(1);
+        }
+
+        .custom-dialog-content h3 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .custom-dialog-content p {
+            margin-bottom: 25px;
+            color: var(--light);
+        }
+
+        .custom-dialog-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .custom-dialog-buttons button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .custom-dialog-buttons .confirm-btn {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: var(--dark);
+        }
+
+        .custom-dialog-buttons .confirm-btn:hover {
+            opacity: 0.9;
+        }
+
+        .custom-dialog-buttons .cancel-btn {
+            background-color: #4a4a6b;
+            color: var(--light);
+        }
+
+        .custom-dialog-buttons .cancel-btn:hover {
+            background-color: #6a6a8b;
+        }
+
+        /* New styles for user messages in chat */
+        .user-message {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: var(--dark); /* Text color for user messages */
+            border-radius: 0.5rem; /* rounded-lg */
+            padding: 0.75rem; /* p-3 */
+            margin-bottom: 0.5rem; /* mb-2 */
+            margin-left: auto; /* ml-auto */
+            max-width: 12rem; /* max-w-xs */
+        }
+
+        /* Favorite icon styling */
+        .favorite-icon.favorited {
+            color: gold; /* Or any other distinct color */
+            text-shadow: 0 0 5px gold;
+        }
+    </style>
+</head>
+<body class="theme-tech">
+    <div id="particles-js"></div>
+    
+    <div class="logo-container">
+        <div class="main-logo">
+            <i class="fas fa-brain text-white text-6xl"></i> </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-32 flex-grow">
+        <header class="text-center mb-12">
+            <h1 class="text-5xl md:text-6xl font-bold mb-4 gradient-text futuristic-text">AI Learning Assistants</h1>
+            <p class="text-xl md:text-2xl mb-8">Discover powerful AI tools to enhance your educational journey</p>
+            
+            <div class="max-w-3xl mx-auto mb-8">
+                <div class="relative">
+                    <input type="text" id="searchInput" placeholder="Search AI tools..." class="w-full search-bar text-white text-lg p-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" required>
+                    <button onclick="searchTools()" class="absolute right-3 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-primary to-secondary p-2 rounded-lg" disabled aria-busy="true">Loading...</button>
+                        <i class="fas fa-search text-white"></i>
+                    </button>
+                </div>
+                <div class="flex flex-wrap justify-center mt-4 gap-2">
+                    <button onclick="filterTools('all')" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition">All</button>
+                    <button onclick="filterTools('3')" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition">★★★</button>
+                    <button onclick="filterTools('2')" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition">★★</button>
+                    <button onclick="filterTools('1')" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition">★</button>
+                    <button onclick="filterTools('favorites')" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition">
+                        <i class="fas fa-heart text-red-400 mr-1"></i>Favorites
+                    </button>
+                    <button onclick="toggleAddToolModal()" class="px-4 py-2 bg-gradient-to-r from-primary to-secondary rounded-lg font-bold ml-2 btn-hover-effect">
+                        <i class="fas fa-plus mr-2"></i>Add Tool
+                    </button>
+                    <button onclick="exportToGoogleSheets()" class="px-4 py-2 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg font-bold btn-hover-effect">
+                        <i class="fas fa-file-export mr-2"></i>Export to Sheets
+                    </button>
+                    <button onclick="redirectToSpreadsheet()" class="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg font-bold btn-hover-effect">
+                        <i class="fas fa-external-link-alt mr-2"></i>View Spreadsheet
+                    </button>
+                    <button onclick="clearAllData()" class="px-4 py-2 bg-gradient-to-r from-red-500 to-orange-500 rounded-lg font-bold btn-hover-effect">
+                        <i class="fas fa-eraser mr-2"></i>Clear Data
+                    </button>
+                </div>
+            </div>
+            
+            <div class="flex justify-center mb-8">
+                <div class="theme-selector p-2 rounded-lg flex gap-2">
+                    <button onclick="changeTheme('tech')" class="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full" title="Tech Theme"></button>
+                    <button onclick="changeTheme('nature')" class="w-8 h-8 bg-gradient-to-br from-green-400 to-blue-400 rounded-full" title="Nature Theme"></button>
+                    <button onclick="changeTheme('fire')" class="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-full" title="Fire Theme"></button>
+                    <button onclick="changeTheme('space')" class="w-8 h-8 bg-gradient-to-br from-purple-500 to-teal-400 rounded-full" title="Space Theme"></button>
+                    <button onclick="changeTheme('dynamic')" class="w-8 h-8 bg-gradient-to-br from-red-500 via-yellow-500 to-blue-500 rounded-full" title="Dynamic Theme"></button>
+                </div>
+            </div>
+        </header>
+        
+        <div id="aiToolsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        </div>
+        
+        <div class="text-center py-8 border-t border-gray-800 mt-8">
+            <h2 class="text-3xl font-bold gradient-text mb-4">Enhance your learning journey</h2>
+            <p class="text-xl mb-6">Try these AI tools today and experience the future of education!</p>
+            <button onclick="scrollToTop()" class="bg-gradient-to-r from-primary to-secondary px-8 py-3 rounded-lg font-bold text-lg btn-hover-effect">
+                Explore More
+            </button>
+        </div>
+    </div>
+    
+    <div class="floating-chat">
+        <div class="bg-gradient-to-br from-primary to-secondary p-4 rounded-full glow-border cursor-pointer tooltip" onclick="toggleChat()">
+            <i class="fas fa-robot text-3xl text-white"></i>
+            <span class="tooltip-text">AI Assistant</span>
+        </div>
+    </div>
+    
+    <div class="scroll-up">
+        <button onclick="scrollToTop()" class="bg-gradient-to-br from-primary to-secondary p-3 rounded-full glow-border">
+            <i class="fas fa-arrow-up text-white text-xl"></i>
+        </button>
+    </div>
+    
+    <div id="addToolModal" class="modal-overlay">
+        <div class="modal-content p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="addEditModalTitle" class="text-xl font-bold gradient-text">Add Your AI Tool</h3>
+                <button onclick="toggleAddToolModal()" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <input type="hidden" id="editToolIndex" required>
+                <div>
+                    <label for="toolName" class="block mb-1">Tool Name</label>
+                    <input type="text" id="toolName" class="w-full bg-gray-800 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                </div>
+                <div>
+                    <label for="toolDescription" class="block mb-1">Short Description</label>
+                    <textarea id="toolDescription" class="w-full bg-gray-800 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary" rows="2"></textarea>
+                </div>
+                <div>
+                    <label for="toolFeatures" class="block mb-1">Full Features (use new lines for bullet points)</label>
+                    <textarea id="toolFeatures" class="w-full bg-gray-800 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary" rows="4"></textarea>
+                </div>
+                <div>
+                    <label for="toolRating" class="block mb-1">Importance Rating (1-3)</label>
+                    <select id="toolRating" class="w-full bg-gray-800 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary">
+                        <option value="1">★</option>
+                        <option value="2">★★</option>
+                        <option value="3">★★★</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="toolUrl" class="block mb-1">Website URL</label>
+                    <input type="url" id="toolUrl" class="w-full bg-gray-800 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                </div>
+                <div>
+                    <label for="toolTutorial" class="block mb-1">Tutorial Video URL (optional)</label>
+                    <input type="url" id="toolTutorial" class="w-full bg-gray-800 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                </div>
+                <div>
+                    <label for="toolYoutube" class="block mb-1">YouTube Channel (optional)</label>
+                    <input type="url" id="toolYoutube" class="w-full bg-gray-800 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                </div>
+                <div>
+                    <label for="toolLogo" class="block mb-1">Logo URL (optional)</label>
+                    <input type="url" id="toolLogo" class="w-full bg-gray-800 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                </div>
+                <div>
+                    <label for="toolCategory" class="block mb-1">Category</label>
+                    <select id="toolCategory" class="w-full bg-gray-800 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary">
+                        <option value="General">General</option>
+                        <option value="Education">Education</option>
+                        <option value="Writing">Writing</option>
+                        <option value="Research">Research</option>
+                        <option value="Coding">Coding</option>
+                        <option value="Productivity">Productivity</option>
+                        <option value="Accessibility">Accessibility</option>
+                        <option value="Creative">Creative</option>
+                        <option value="Custom">Custom</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="toolPricing" class="block mb-1">Pricing</label>
+                    <select id="toolPricing" class="w-full bg-gray-800 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary">
+                        <option value="Free">Free</option>
+                        <option value="Freemium">Freemium</option>
+                        <option value="Paid">Paid</option>
+                    </select>
+                </div>
+                <button onclick="saveTool()" id="saveToolBtn" class="w-full bg-gradient-to-r from-primary to-secondary py-2 rounded-lg font-bold mt-4 btn-hover-effect">
+                    Add Tool
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="cardModal" class="card-modal">
+        <div class="card-modal-content">
+            <button class="close-modal" onclick="closeCardModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="flex flex-col md:flex-row gap-6">
+                <div class="w-full md:w-1/3 flex flex-col items-center">
+                    <div id="modalLogo" class="w-32 h-32 mb-4 flex items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary">
+                        <i class="fas fa-robot text-white text-4xl"></i>
+                    </div>
+                    <h2 id="modalTitle" class="text-2xl font-bold gradient-text text-center mb-2"></h2>
+                    <div id="modalRating" class="star-rating text-xl mb-4"></div>
+                    <div id="modalPricing" class="bg-gray-700 text-white px-3 py-1 rounded-full text-xs font-bold mb-4"></div>
+                    <div id="modalCategory" class="bg-gradient-to-r from-primary to-secondary text-dark px-3 py-1 rounded-full text-xs font-bold mb-4"></div>
+                    <p id="modalDescription" class="text-gray-300 text-center mb-6"></p>
+                    <div id="modalButtons" class="flex flex-wrap justify-center gap-2 w-full"></div>
+                </div>
+                <div class="w-full md:w-2/3">
+                    <h3 class="text-xl font-bold gradient-text mb-4">Features</h3>
+                    <div id="modalFeatures" class="text-gray-300 mb-6"></div>
+                    
+                    <div id="elaboratedFeaturesSection" class="hidden">
+                        <h3 class="text-xl font-bold gradient-text mb-4">Elaborated Features ✨</h3>
+                        <div id="elaboratedFeaturesContent" class="text-gray-300 mb-6"></div>
+                        <div id="elaboratedFeaturesLoading" class="typing-indicator my-4 hidden">
+                            <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+                            <span class="ml-2 text-sm text-gray-400">Thinking...</span>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-bold gradient-text mb-4">Tutorial</h3>
+                    <div id="modalTutorial" class="mb-6">
+                        <p class="text-gray-400">No tutorial available</p>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold gradient-text mb-4">Related Tools</h3>
+                    <div id="relatedTools" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="chatModal" class="modal-overlay">
+        <div class="modal-content p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold gradient-text">AI Learning Assistant</h3>
+                <button onclick="toggleChat()" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="mb-4">
+                <h4 class="text-sm font-semibold mb-2">Quick Prompts:</h4>
+                <div class="flex flex-wrap">
+                    <div class="prompt-btn" onclick="usePrompt('Tell me about the best writing tools.')">Best writing tools</div>
+                    <div class="prompt-btn" onclick="usePrompt('What are some free AI tools?')">Free AI tools</div>
+                    <div class="prompt-btn" onclick="usePrompt('Do you know any coding assistants?')">Coding assistants</div>
+                    <div class="prompt-btn" onclick="usePrompt('Suggest some research tools.')">Research tools</div>
+                    <div class="prompt-btn" onclick="usePrompt('AI tools for students?')">For students</div>
+                    <div class="prompt-btn" onclick="usePrompt('Which AI is best for beginners?')">For beginners</div>
+                    <div class="prompt-btn" onclick="usePrompt('AI for productivity?')">Productivity</div>
+                    <div class="prompt-btn" onclick="usePrompt('AI for creative work?')">Creative work</div>
+                    <div class="prompt-btn" onclick="usePrompt('Summarize this: [Paste text here]')">Summarize Text ✨</div>
+                </div>
+            </div>
+            
+            <div id="chatMessages" class="h-64 overflow-y-auto mb-4 border-b border-gray-700 pb-4">
+                <div class="ai-message bg-gray-800 rounded-lg p-3 mb-2 max-w-xs">
+                    <p>Hello! I'm your AI learning assistant. How can I help you today?</p>
+                    <p class="text-xs text-gray-400 mt-1">Try clicking one of the prompts above or ask me anything about AI tools!</p>
+                </div>
+            </div>
+            <div class="flex">
+                <input type="text" id="chatInput" placeholder="Ask about AI tools..." class="flex-grow bg-gray-800 text-white rounded-l-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                <button onclick="sendMessage()" class="bg-gradient-to-r from-primary to-secondary px-4 rounded-r-lg">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="customDialog" class="custom-dialog-overlay">
+        <div class="custom-dialog-content">
+            <h3 id="customDialogTitle"></h3>
+            <p id="customDialogMessage"></p>
+            <div id="customDialogButtons" class="custom-dialog-buttons">
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+    <script>
+        // Google API Client ID and API Key
+        const CLIENT_ID = '671675605527-8eoq5m2nvp3bkiabicejjolo9fl9lau5.apps.googleusercontent.com';
+        const API_KEY = 'process.env.AI-ASSISTANT_HTML_API_KEY'; // Note: API Key is generally for public data access, OAuth for user data.
+        const SHEET_ID = '17axa2AQGiauNiwRwE2o7Y-dnOpXH6eUSHt0FL6-W5-I'; // Provided Sheet ID
+        const SHEET_LINK = 'https://docs.google.com/spreadsheets/d/17axa2AQGiauNiwRwE2o7Y-dnOpXH6eUSHt0FL6-W5-I/edit?gid=0#gid=0'; // Provided Sheet Link
+
+        const DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
+        const SCOPES = 'https://www.googleapis.com/auth/spreadsheets';
+
+        let gapiInited = false;
+        let gisInited = false;
+        let tokenClient;
+
+        /**
+         * Callback function called when the Google API client library (gapi) is loaded.
+         */
+        function gapiLoaded() {
+            gapi.load('client', initializeGapiClient);
+        }
+
+        /**
+         * Initializes the gapi client for Google Sheets API.
+         */
+        async function initializeGapiClient() {
+            await gapi.client.init({
+                apiKey: API_KEY,
+                discoveryDocs: DISCOVERY_DOCS,
+            });
+            gapiInited = true;
+            gisLoaded(); // Call gisLoaded after gapi client is initialized
+        }
+
+        /**
+         * Callback function called when the Google Identity Services library (gis) is loaded.
+         */
+        function gisLoaded() {
+            tokenClient = google.accounts.oauth2.initTokenClient({
+                client_id: CLIENT_ID,
+                scope: SCOPES,
+                callback: '', // Will be set later to handle the token
+            });
+            gisInited = true;
+        }
+
+        // Custom Dialog Implementation (replaces alert and confirm)
+        let resolveCustomDialog;
+
+        /**
+         * Displays a custom alert or confirmation dialog.
+         * @param {string} title - The title of the dialog.
+         * @param {string} message - The message content of the dialog.
+         * @param {'alert'|'confirm'|'prompt'} type - The type of dialog ('alert', 'confirm', or 'prompt').
+         * @param {string} [defaultValue=''] - Default value for prompt type.
+         * @returns {Promise<boolean|string>} - Resolves to true/false for 'confirm', string for 'prompt', true for 'alert'.
+         */
+        function showCustomDialog(title, message, type = 'alert', defaultValue = '') {
+            const dialog = document.getElementById('customDialog');
+            const dialogTitle = document.getElementById('customDialogTitle');
+            const dialogMessage = document.getElementById('customDialogMessage');
+            const dialogButtons = document.getElementById('customDialogButtons');
+
+            dialogTitle.textContent = title;
+            dialogMessage.textContent = message;
+            dialogButtons.innerHTML = ''; // Clear previous buttons
+
+            return new Promise((resolve) => {
+                resolveCustomDialog = resolve;
+
+                if (type === 'alert') {
+                    const okBtn = document.createElement('button');
+                    okBtn.className = 'confirm-btn';
+                    okBtn.textContent = 'OK';
+                    okBtn.onclick = () => {
+                        dialog.classList.remove('active');
+                        resolveCustomDialog(true);
+                    };
+                    dialogButtons.appendChild(okBtn);
+                } else if (type === 'confirm') {
+                    const confirmBtn = document.createElement('button');
+                    confirmBtn.className = 'confirm-btn';
+                    confirmBtn.textContent = 'Yes';
+                    confirmBtn.onclick = () => {
+                        dialog.classList.remove('active');
+                        resolveCustomDialog(true);
+                    };
+                    dialogButtons.appendChild(confirmBtn);
+
+                    const cancelBtn = document.createElement('button');
+                    cancelBtn.className = 'cancel-btn';
+                    cancelBtn.textContent = 'No';
+                    cancelBtn.onclick = () => {
+                        dialog.classList.remove('active');
+                        resolveCustomDialog(false);
+                    };
+                    dialogButtons.appendChild(cancelBtn);
+                } else if (type === 'prompt') {
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.value = defaultValue;
+                    input.className = 'w-full bg-gray-800 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary mb-4';
+                    dialogMessage.appendChild(input); // Append input to message area
+
+                    const okBtn = document.createElement('button');
+                    okBtn.className = 'confirm-btn';
+                    okBtn.textContent = 'OK';
+                    okBtn.onclick = () => {
+                        dialog.classList.remove('active');
+                        resolveCustomDialog(input.value);
+                    };
+                    dialogButtons.appendChild(okBtn);
+
+                    const cancelBtn = document.createElement('button');
+                    cancelBtn.className = 'cancel-btn';
+                    cancelBtn.textContent = 'Cancel';
+                    cancelBtn.onclick = () => {
+                        dialog.classList.remove('active');
+                        resolveCustomDialog(null); // Resolve with null if cancelled
+                    };
+                    dialogButtons.appendChild(cancelBtn);
+                }
+                dialog.classList.add('active');
+            });
+        }
+
+        // Initialize particles.js and load tools on DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize particles.js for background effects
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#00f0ff"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": false,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#00f0ff",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 2,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+            
+            loadAITools(); // Load the AI tools into the grid
+            
+            // Set up scroll event listener for the scroll-up button visibility
+            window.addEventListener('scroll', function() {
+                const scrollUp = document.querySelector('.scroll-up');
+                if (window.scrollY > 300) {
+                    scrollUp.classList.add('visible');
+                } else {
+                    scrollUp.classList.remove('visible');
+                }
+            });
+        });
+        
+        // AI Tools Data (default tools)
+        const aiTools = [
+            {
+                name: "ChatGPT",
+                description: "Advanced AI for answers, summarization, creative writing, translation, and coding",
+                features: "ChatGPT is a powerful AI language model that can assist with a wide range of tasks including answering questions, summarizing content, creative writing, language translation, and even coding assistance. It's particularly useful for brainstorming ideas, drafting essays, and explaining complex concepts in simple terms.",
+                rating: 3,
+                url: "https://chat.openai.com",
+                tutorial: "https://www.youtube.com/watch?v=0", 
+                youtube: "https://www.youtube.com/channel/UCX7YwN_x8M-gX6C-8C_C_Cg", 
+                logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/ChatGPT_logo.svg/240px-ChatGPT_logo.svg.png",
+                category: "General",
+                pricing: "Freemium"
+            },
+            {
+                name: "Google Gemini",
+                description: "Multimodal AI for research, Q&A, and Google Workspace integration",
+                features: "Google Gemini is a multimodal AI assistant that can process and understand text, images, and more. It excels at research tasks, answering complex questions, and integrates seamlessly with Google Workspace apps. It's particularly useful for students and researchers who need to synthesize information from multiple sources.",
+                rating: 3,
+                url: "https://gemini.google.com",
+                tutorial: "https://www.youtube.com/watch?v=2", 
+                youtube: "https://www.youtube.com/user/Google", 
+                logo: "https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304ff6292a690345.svg",
+                category: "General",
+                pricing: "Free"
+            },
+            {
+                name: "Doctrina AI",
+                description: "Specialized AI for creating notes, quizzes, and flashcards from study materials",
+                features: "Doctrina AI is specifically designed for education, helping students transform their study materials into organized notes, interactive quizzes, and memory-boosting flashcards. It's perfect for exam preparation and can save hours of manual note-taking by automatically generating study aids from your materials.",
+                rating: 2,
+                url: "https://doctrina.ai",
+                tutorial: "https://www.youtube.com/watch?v=4", 
+                youtube: "https://www.youtube.com/channel/UCX7YwN_x8M-gX6C-8C_C_Cg", 
+                logo: "https://doctrina.ai/wp-content/uploads/2023/04/doctrina-ai-logo.png",
+                category: "Education",
+                pricing: "Freemium"
+            },
+            {
+                name: "PDF AI",
+                description: "Chat with PDF documents, extract summaries, and answer questions",
+                features: "PDF AI allows you to upload PDF documents and interact with them conversationally. You can ask questions about the content, get summaries of key points, and extract specific information. It's particularly useful for researchers and students dealing with large volumes of PDF documents, with a generous allowance of 500 questions per month.",
+                rating: 2,
+                url: "https://pdf.ai",
+                tutorial: "https://www.youtube.com/watch?v=6", 
+                youtube: "https://www.youtube.com/channel/UCX7YwN_x8M-gX6C-8C_C_Cg", 
+                logo: "https://pdf.ai/favicon.ico",
+                category: "Research",
+                pricing: "Freemium"
+            },
+            {
+                name: "ChatPDF",
+                description: "Ask questions and get summaries from PDF documents",
+                features: "ChatPDF is a simple yet powerful tool that lets you chat with your PDF documents. Upload a PDF and you can ask questions about its content, get summaries, or find specific information. It's great for quickly extracting information from research papers, textbooks, or reports without having to read through everything.",
+                rating: 2,
+                url: "https://www.chatpdf.com",
+                tutorial: "https://www.youtube.com/watch?v=8", 
+                youtube: "https://www.youtube.com/channel/UCX7YwN_x8M-gX6C-8C_C_Cg", 
+                logo: "https://www.chatpdf.com/favicon.ico",
+                category: "Research",
+                pricing: "Freemium"
+            },
+            {
+                name: "Grammarly",
+                description: "Advanced grammar, spelling, and style checking with tone suggestions",
+                features: "Grammarly is an AI-powered writing assistant that checks your text for grammar, spelling, punctuation, and style errors. It offers real-time suggestions to improve clarity, conciseness, and tone. The premium version includes advanced features like genre-specific writing style checks, plagiarism detection, and vocabulary enhancement suggestions.",
+                rating: 3,
+                url: "https://www.grammarly.com",
+                tutorial: "https://www.youtube.com/watch?v=10", 
+                youtube: "https://www.youtube.com/user/Grammarly", 
+                logo: "https://static.grammarly.com/assets/files/cb6ce17d281d15f2c819035bcd430b0e/grammarly.png",
+                category: "Writing",
+                pricing: "Freemium"
+            },
+            {
+                name: "Quillbot",
+                description: "AI-powered paraphrasing tool with citation and summarization features",
+                features: "Quillbot is a versatile AI writing tool that specializes in paraphrasing text while maintaining the original meaning. It's excellent for rewording sentences, paragraphs, or entire articles. Additional features include a grammar checker, summarizer, and citation generator, making it a comprehensive tool for academic writing and content creation.",
+                rating: 2,
+                url: "https://quillbot.com",
+                tutorial: "https://www.youtube.com/watch?v=12", 
+                youtube: "https://www.youtube.com/channel/UCX7YwN_x8M-gX6C-8C_C_Cg", 
+                logo: "https://quillbot.com/favicon.ico",
+                category: "Writing",
+                pricing: "Freemium"
+            },
+            {
+                name: "Gamma AI",
+                description: "AI-powered presentation generator that creates slides from your content",
+                features: "Gamma AI transforms your ideas into professional presentations with minimal effort. Simply provide your content and Gamma will structure it into visually appealing slides with appropriate layouts, graphics, and formatting. It's perfect for students and professionals who need to create presentations quickly without sacrificing quality.",
+                rating: 1,
+                url: "https://gamma.app",
+                tutorial: "https://www.youtube.com/watch?v=14", 
+                youtube: "https://www.youtube.com/channel/UCX7YwN_x8M-gX6C-8C_C_Cg", 
+                logo: "https://gamma.app/favicon.ico",
+                category: "Productivity",
+                pricing: "Freemium"
+            },
+            {
+                name: "AskCodi",
+                description: "AI coding assistant for code generation, explanation, and debugging",
+                features: "AskCodi is an AI-powered coding assistant that helps developers write better code faster. It can generate code snippets, explain existing code, suggest improvements, and help debug errors. It supports multiple programming languages and integrates with popular IDEs, making it a valuable tool for computer science students and professional developers alike.",
+                rating: 2,
+                url: "https://askcodi.com",
+                tutorial: "https://www.youtube.com/watch?v=16", 
+                youtube: "https://www.youtube.com/channel/UCX7YwN_x8M-gX6C-8C_C_Cg", 
+                logo: "https://askcodi.com/favicon.ico",
+                category: "Coding",
+                pricing: "Freemium"
+            },
+            {
+                name: "NotebookLM",
+                description: "AI notebook that summarizes and extracts key information from your notes",
+                features: "NotebookLM is an AI-powered notebook that helps you organize and extract value from your notes. It can summarize your content, generate key takeaways, and even suggest connections between different notes. It's particularly useful for students and researchers who need to synthesize information from multiple sources and create coherent study materials.",
+                rating: 2,
+                url: "https://notebooklm.google",
+                tutorial: "https://www.youtube.com/watch?v=18", 
+                youtube: "https://www.youtube.com/channel/UCX7YwN_x8M-gX6C-8C_C_Cg", 
+                logo: "https://notebooklm.google/favicon.ico",
+                category: "Education",
+                pricing: "Free"
+            },
+            {
+                name: "Otter AI",
+                description: "AI-powered transcription service for meetings and lectures",
+                features: "Otter AI provides real-time transcription of meetings, lectures, and conversations. It can distinguish between different speakers, generate searchable transcripts, and even summarize key points. The AI learns from your corrections to improve accuracy over time. It's invaluable for students who want to focus on lectures without worrying about taking detailed notes.",
+                rating: 1,
+                url: "https://otter.ai",
+                tutorial: "https://www.youtube.com/watch?v=20", 
+                youtube: "https://www.youtube.com/channel/UCX7YwN_x8M-gX6C-8C_C_Cg", 
+                logo: "https://otter.ai/favicon.ico",
+                category: "Productivity",
+                pricing: "Freemium"
+            },
+            {
+                name: "Natural Readers",
+                description: "Text-to-speech reader that converts written content into natural-sounding audio",
+                features: "Natural Readers converts text into natural-sounding speech, allowing you to listen to documents, articles, and books instead of reading them. It supports multiple languages and voices, with adjustable speed and pronunciation. This is particularly helpful for auditory learners, people with reading difficulties, or anyone who wants to consume content while multitasking.",
+                rating: 1,
+                url: "https://www.naturalreaders.com",
+                tutorial: "https://www.youtube.com/watch?v=22", 
+                youtube: "https://www.youtube.com/channel/UCX7YwN_x8M-gX6C-8C_C_Cg", 
+                logo: "https://www.naturalreaders.com/favicon.ico",
+                category: "Accessibility",
+                pricing: "Freemium"
+            }
+        ];
+        
+        // User-added tools (stored in localStorage)
+        let userTools = JSON.parse(localStorage.getItem('userTools')) || [];
+        
+        // Current filter state
+        let currentFilter = 'all';
+
+        // Chat history for the AI assistant
+        let chatHistory = [];
+
+        // Load favorite tool IDs from localStorage
+        let favoriteToolNames = new Set(JSON.parse(localStorage.getItem('favoriteTools')) || []);
+
+        /**
+         * Saves the current set of favorite tool names to localStorage.
+         */
+        function saveFavorites() {
+            localStorage.setItem('favoriteTools', JSON.stringify(Array.from(favoriteToolNames)));
+        }
+
+        /**
+         * Toggles the favorite status of a tool.
+         * @param {string} toolName - The name of the tool to toggle favorite status for.
+         */
+        function toggleFavorite(toolName) {
+            if (favoriteToolNames.has(toolName)) {
+                favoriteToolNames.delete(toolName);
+                showCustomDialog('Removed from Favorites', `"${toolName}" has been removed from your favorites.`, 'alert');
+            } else {
+                favoriteToolNames.add(toolName);
+                showCustomDialog('Added to Favorites', `"${toolName}" has been added to your favorites!`, 'alert');
+            }
+            saveFavorites();
+            loadAITools(); // Reload tools to update favorite icons and filters
+            // If the modal is open for this tool, update its favorite icon
+            const modal = document.getElementById('cardModal');
+            if (modal.classList.contains('active') && document.getElementById('modalTitle').textContent === toolName) {
+                updateModalFavoriteButton(toolName);
+            }
+        }
+
+        /**
+         * Updates the favorite button in the modal based on the tool's favorite status.
+         * @param {string} toolName - The name of the tool.
+         */
+        function updateModalFavoriteButton(toolName) {
+            const favoriteBtn = document.getElementById('modalFavoriteBtn');
+            if (favoriteBtn) {
+                favoriteBtn.classList.toggle('favorited', favoriteToolNames.has(toolName));
+                favoriteBtn.querySelector('.tooltip-text').textContent = favoriteToolNames.has(toolName) ? 'Remove from Favorites' : 'Add to Favorites';
+            }
+        }
+
+        /**
+         * Loads AI tools into the grid, combining default and user-added tools.
+         * Tools are sorted by rating in descending order.
+         */
+        function loadAITools() {
+            const grid = document.getElementById('aiToolsGrid');
+            grid.innerHTML = '';
+            
+            // Combine default tools with user tools and sort by rating (highest first)
+            const allTools = [...aiTools, ...userTools].map(tool => ({
+                ...tool,
+                isFavorite: favoriteToolNames.has(tool.name) // Add favorite status
+            })).sort((a, b) => b.rating - a.rating);
+            
+            // Filter tools based on current filter
+            let filteredTools = allTools;
+            if (currentFilter !== 'all') {
+                if (currentFilter === 'favorites') {
+                    filteredTools = allTools.filter(tool => tool.isFavorite);
+                } else {
+                    filteredTools = allTools.filter(tool => tool.rating === parseInt(currentFilter));
+                }
+            }
+            
+            filteredTools.forEach((tool, index) => {
+                const card = document.createElement('div');
+                card.className = 'ai-card rounded-xl relative overflow-hidden card-hover-effect';
+                card.innerHTML = `
+                    <div class="card-content">
+                        <div class="card-badge">${tool.category || 'AI Tool'}</div>
+                        <div class="price-tag">${tool.pricing || 'Free'}</div>
+                        
+                        <div class="card-logo-container">
+                            ${tool.logo ? `
+                            <img src="${tool.logo}" alt="${tool.name} logo" class="card-logo" onerror="this.onerror=null;this.src='https://placehold.co/80x80/00f0ff/0a0a20?text=AI';">
+                            ` : `
+                            <div class="bg-gradient-to-br from-primary to-secondary w-full h-full rounded-full flex items-center justify-center">
+                                <i class="fas fa-robot text-white text-2xl"></i>
+                            </div>
+                            `}
+                        </div>
+                        
+                        <div class="text-center mb-3">
+                            <h3 class="text-xl font-bold gradient-text">${tool.name}</h3>
+                            <div class="star-rating text-lg">${'★'.repeat(tool.rating)}${'☆'.repeat(3 - tool.rating)}</div>
+                        </div>
+                        
+                        <div class="card-description">
+                            <p class="text-gray-300 text-sm">${tool.description}</p>
+                        </div>
+                        
+                        <div class="card-footer-section">
+                            <div class="card-tags">
+                                <span class="card-tag">${tool.category}</span>
+                                <span class="card-tag">${tool.pricing}</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="card-action-btn tooltip" onclick="event.stopPropagation(); window.open('${tool.url}', '_blank')">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    <span class="tooltip-text">Visit Website</span>
+                                </button>
+                                ${tool.tutorial ? `
+                                <button class="card-action-btn tooltip" onclick="event.stopPropagation(); window.open('${tool.tutorial}', '_blank')">
+                                    <i class="fas fa-video"></i>
+                                    <span class="tooltip-text">Tutorial</span>
+                                </button>
+                                ` : ''}
+                                <button class="card-action-btn tooltip ${tool.isFavorite ? 'favorited' : ''}" onclick="event.stopPropagation(); toggleFavorite('${tool.name}')">
+                                    <i class="fas fa-heart"></i>
+                                    <span class="tooltip-text">${tool.isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}</span>
+                                </button>
+                                ${userTools.includes(tool) ? `
+                                <button class="card-action-btn tooltip" onclick="event.stopPropagation(); openEditToolModal(${userTools.indexOf(tool)})">
+                                    <i class="fas fa-edit"></i>
+                                    <span class="tooltip-text">Edit Tool</span>
+                                </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Add click event to show modal
+                card.addEventListener('click', () => {
+                    showCardModal(tool);
+                });
+                
+                grid.appendChild(card);
+                
+                // Add animation to cards
+                gsap.from(card, {
+                    opacity: 0,
+                    y: 50,
+                    duration: 0.5,
+                    delay: index * 0.1,
+                    ease: "power2.out"
+                });
+            });
+        }
+        
+        /**
+         * Displays the modal with detailed information about a selected AI tool.
+         * @param {object} tool - The AI tool object to display.
+         */
+        function showCardModal(tool) {
+            const modal = document.getElementById('cardModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalDescription = document.getElementById('modalDescription');
+            const modalRating = document.getElementById('modalRating');
+            const modalCategory = document.getElementById('modalCategory');
+            const modalPricing = document.getElementById('modalPricing');
+            const modalFeatures = document.getElementById('modalFeatures');
+            const modalTutorial = document.getElementById('modalTutorial');
+            const modalButtons = document.getElementById('modalButtons');
+            const modalLogo = document.getElementById('modalLogo');
+            const relatedTools = document.getElementById('relatedTools');
+            const elaboratedFeaturesSection = document.getElementById('elaboratedFeaturesSection');
+            const elaboratedFeaturesContent = document.getElementById('elaboratedFeaturesContent');
+            
+            // Hide elaborated features section initially
+            elaboratedFeaturesSection.classList.add('hidden');
+            elaboratedFeaturesContent.innerHTML = '';
+
+            // Set basic info
+            modalTitle.textContent = tool.name;
+            modalDescription.textContent = tool.description;
+            modalRating.innerHTML = `${'★'.repeat(tool.rating)}${'☆'.repeat(3 - tool.rating)}`;
+            modalCategory.textContent = tool.category || 'AI Tool';
+            modalPricing.textContent = tool.pricing || 'Free';
+            
+            // Set logo
+            if (tool.logo) {
+                modalLogo.innerHTML = `<img src="${tool.logo}" alt="${tool.name} logo" class="w-full h-full object-contain" onerror="this.onerror=null;this.src='https://placehold.co/128x128/00f0ff/0a0a20?text=AI';">`;
+            } else {
+                modalLogo.innerHTML = '<i class="fas fa-robot text-white text-4xl"></i>';
+            }
+            
+            // Set features with animation
+            modalFeatures.innerHTML = '';
+            const features = tool.features.split('\n').filter(f => f.trim() !== '');
+            features.forEach((feature, i) => {
+                const p = document.createElement('p');
+                p.className = 'feature-item mb-2';
+                p.textContent = feature;
+                modalFeatures.appendChild(p);
+                
+                // Animate features in
+                setTimeout(() => {
+                    p.classList.add('active');
+                }, i * 100);
+            });
+            
+            // Set tutorial if available
+            modalTutorial.innerHTML = '';
+            if (tool.tutorial) {
+                // Embed YouTube video if it's a YouTube URL
+                const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:m\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=|embed\/|v\/|)([\w-]{11})(?:\S+)?/i;
+                const match = tool.tutorial.match(youtubeRegex);
+                if (match && match[1]) {
+                    modalTutorial.innerHTML = `
+                        <iframe 
+                            width="100%" 
+                            height="315" 
+                            src="https://www.youtube.com/embed/${match[1]}" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen
+                            class="rounded-lg shadow-lg"
+                        ></iframe>
+                    `;
+                } else {
+                    const a = document.createElement('a');
+                    a.href = tool.tutorial;
+                    a.target = '_blank';
+                    a.className = 'text-primary hover:underline';
+                    a.innerHTML = '<i class="fas fa-video mr-2"></i> Watch Tutorial';
+                    modalTutorial.appendChild(a);
+                }
+            } else {
+                modalTutorial.innerHTML = '<p class="text-gray-400">No tutorial available</p>';
+            }
+            
+            // Set buttons
+            modalButtons.innerHTML = '';
+            const websiteBtn = document.createElement('a');
+            websiteBtn.href = tool.url;
+            websiteBtn.target = '_blank';
+            websiteBtn.className = 'bg-gradient-to-r from-primary to-secondary text-white px-4 py-2 rounded-lg font-bold btn-hover-effect';
+            websiteBtn.textContent = 'Visit Website';
+            modalButtons.appendChild(websiteBtn);
+
+            // Add Elaborate Features button
+            const elaborateBtn = document.createElement('button');
+            elaborateBtn.className = 'bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg btn-hover-effect';
+            elaborateBtn.innerHTML = 'Elaborate Features ✨';
+            elaborateBtn.onclick = () => elaborateToolFeatures(tool);
+            modalButtons.appendChild(elaborateBtn);
+            
+            if (tool.youtube) {
+                const youtubeBtn = document.createElement('a');
+                youtubeBtn.href = tool.youtube;
+                youtubeBtn.target = '_blank';
+                youtubeBtn.className = 'bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg btn-hover-effect';
+                youtubeBtn.innerHTML = '<i class="fab fa-youtube mr-2"></i> YouTube Channel';
+                modalButtons.appendChild(youtubeBtn);
+            }
+
+            // Add Favorite button to modal
+            const favoriteBtn = document.createElement('button');
+            favoriteBtn.id = 'modalFavoriteBtn'; // Add an ID for easy access
+            favoriteBtn.className = `bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg btn-hover-effect tooltip ${favoriteToolNames.has(tool.name) ? 'favorited' : ''}`;
+            favoriteBtn.innerHTML = `<i class="fas fa-heart mr-2"></i><span class="tooltip-text">${favoriteToolNames.has(tool.name) ? 'Remove from Favorites' : 'Add to Favorites'}</span>`;
+            favoriteBtn.onclick = () => toggleFavorite(tool.name);
+            modalButtons.appendChild(favoriteBtn);
+
+            // Add Copy Tool Details button
+            const copyDetailsBtn = document.createElement('button');
+            copyDetailsBtn.className = 'bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg btn-hover-effect';
+            copyDetailsBtn.innerHTML = '<i class="fas fa-copy mr-2"></i> Copy Details';
+            copyDetailsBtn.onclick = () => copyToolDetails(tool);
+            modalButtons.appendChild(copyDetailsBtn);
+
+            // Add Share Tool button (placeholder functionality)
+            const shareToolBtn = document.createElement('button');
+            shareToolBtn.className = 'bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg btn-hover-effect';
+            shareToolBtn.innerHTML = '<i class="fas fa-share-alt mr-2"></i> Share Tool';
+            shareToolBtn.onclick = () => shareTool(tool);
+            modalButtons.appendChild(shareToolBtn);
+            
+            // Add remove and edit buttons for user tools
+            const toolIndex = userTools.findIndex(t => t.name === tool.name);
+            if (toolIndex !== -1) { // Check if it's a user-added tool
+                const editBtn = document.createElement('button');
+                editBtn.className = 'bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg btn-hover-effect';
+                editBtn.innerHTML = '<i class="fas fa-edit mr-2"></i> Edit';
+                editBtn.onclick = async (e) => {
+                    e.stopPropagation();
+                    closeCardModal(); // Close current modal before opening edit modal
+                    openEditToolModal(toolIndex);
+                };
+                modalButtons.appendChild(editBtn);
+
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg btn-hover-effect';
+                removeBtn.innerHTML = '<i class="fas fa-trash mr-2"></i> Remove';
+                removeBtn.onclick = async (e) => {
+                    e.stopPropagation();
+                    const confirmed = await showCustomDialog('Confirm Removal', `Are you sure you want to remove "${tool.name}"?`, 'confirm');
+                    if (confirmed) {
+                        removeTool(toolIndex);
+                        closeCardModal();
+                    }
+                };
+                modalButtons.appendChild(removeBtn);
+            }
+            
+            // Show related tools (same category)
+            relatedTools.innerHTML = '';
+            const related = [...aiTools, ...userTools].filter(t => 
+                t.category === tool.category && t.name !== tool.name
+            ).slice(0, 3);
+            
+            if (related.length > 0) {
+                related.forEach(relTool => {
+                    const relCard = document.createElement('div');
+                    relCard.className = 'bg-gray-800 rounded-lg p-3 cursor-pointer hover:bg-gray-700 transition';
+                    relCard.innerHTML = `
+                        <div class="flex items-center gap-2">
+                            ${relTool.logo ? `
+                            <img src="${relTool.logo}" alt="${relTool.name} logo" class="w-8 h-8 object-contain" onerror="this.onerror=null;this.src='https://placehold.co/32x32/00f0ff/0a0a20?text=AI';">
+                            ` : `
+                            <div class="bg-gradient-to-br from-primary to-secondary w-8 h-8 rounded-full flex items-center justify-center">
+                                <i class="fas fa-robot text-white text-xs"></i>
+                            </div>
+                            `}
+                            <div>
+                                <h4 class="text-sm font-bold">${relTool.name}</h4>
+                                <div class="star-rating text-xs">${'★'.repeat(relTool.rating)}${'☆'.repeat(3 - relTool.rating)}</div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    relCard.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        showCardModal(relTool);
+                    });
+                    
+                    relatedTools.appendChild(relCard);
+                });
+            } else {
+                relatedTools.innerHTML = '<p class="text-gray-400 col-span-3">No related tools found</p>';
+            }
+            
+            // Show modal with animation
+            modal.classList.add('active');
+            
+            // Animate text elements
+            const animateElements = [
+                modalTitle, modalDescription, modalRating, modalCategory, modalPricing,
+                ...modalFeatures.querySelectorAll('p'), modalTutorial
+            ];
+            
+            animateElements.forEach((el, i) => {
+                el.classList.add('animate-text');
+                setTimeout(() => {
+                    el.classList.add('active');
+                }, i * 100);
+            });
+        }
+        
+        /**
+         * Uses the LLM to elaborate on the features and use cases of a given tool.
+         * @param {object} tool - The AI tool object to elaborate on.
+         */
+        async function elaborateToolFeatures(tool) {
+            const elaboratedFeaturesSection = document.getElementById('elaboratedFeaturesSection');
+            const elaboratedFeaturesContent = document.getElementById('elaboratedFeaturesContent');
+            const elaboratedFeaturesLoading = document.getElementById('elaboratedFeaturesLoading');
+
+            elaboratedFeaturesSection.classList.remove('hidden');
+            elaboratedFeaturesContent.innerHTML = ''; // Clear previous content
+            elaboratedFeaturesLoading.classList.remove('hidden'); // Show loading indicator
+
+            try {
+                // Construct a specific prompt for feature elaboration
+                const prompt = `Elaborate on the features and suggest diverse use cases for the AI tool "${tool.name}". Its short description is: "${tool.description}". Its key features are: "${tool.features}". Focus on how a student or professional could specifically benefit from these features. Keep the response concise, around 100-150 words.`;
+                
+                const payload = { 
+                    contents: [{ role: "user", parts: [{ text: prompt }] }] 
+                };
+                const apiKey = ""; // Canvas will provide this at runtime
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                
+                elaboratedFeaturesLoading.classList.add('hidden'); // Hide loading indicator
+
+                let llmResponseText = "Could not elaborate features at this time. Please try again.";
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    llmResponseText = result.candidates[0].content.parts[0].text;
+                }
+                elaboratedFeaturesContent.innerHTML = `<p>${llmResponseText}</p>`;
+            } catch (error) {
+                console.error("Error elaborating features with LLM:", error);
+                elaboratedFeaturesLoading.classList.add('hidden');
+                elaboratedFeaturesContent.innerHTML = `<p class="text-red-400">Failed to elaborate features. Please try again.</p>`;
+            }
+        }
+
+        /**
+         * Copies the details of a tool to the clipboard.
+         * @param {object} tool - The tool object whose details are to be copied.
+         */
+        async function copyToolDetails(tool) {
+            const details = `
+Tool Name: ${tool.name}
+Description: ${tool.description}
+Features: ${tool.features.split('\n').map(f => `- ${f.trim()}`).join('\n')}
+Rating: ${'★'.repeat(tool.rating)}
+Category: ${tool.category}
+Pricing: ${tool.pricing}
+Website: ${tool.url}
+${tool.tutorial ? `Tutorial: ${tool.tutorial}` : ''}
+${tool.youtube ? `YouTube Channel: ${tool.youtube}` : ''}
+            `.trim();
+
+            try {
+                // Use a temporary textarea to copy text to clipboard
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = details;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempTextArea);
+                await showCustomDialog('Copied!', 'Tool details copied to clipboard.', 'alert');
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+                await showCustomDialog('Error', 'Failed to copy tool details. Please try again manually.', 'alert');
+            }
+        }
+
+        /**
+         * Simulates sharing a tool by copying a placeholder link.
+         * In a real application, this would generate a unique shareable link.
+         * @param {object} tool - The tool object to share.
+         */
+        async function shareTool(tool) {
+            const shareLink = `Check out this AI tool: ${tool.name} - ${tool.url}`;
+            try {
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = shareLink;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempTextArea);
+                await showCustomDialog('Link Copied!', `A shareable link for "${tool.name}" has been copied to your clipboard.`, 'alert');
+            } catch (err) {
+                console.error('Failed to copy share link: ', err);
+                await showCustomDialog('Error', 'Failed to generate share link. Please try again.', 'alert');
+            }
+        }
+
+        /**
+         * Closes the card detail modal.
+         */
+        function closeCardModal() {
+            const modal = document.getElementById('cardModal');
+            modal.classList.remove('active');
+        }
+        
+        /**
+         * Filters the AI tools displayed in the grid based on the search input.
+         */
+        function searchTools() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.ai-card');
+            
+            cards.forEach(card => {
+                const name = card.querySelector('h3').textContent.toLowerCase();
+                const desc = card.querySelector('.card-description p').textContent.toLowerCase();
+                const category = card.querySelector('.card-badge')?.textContent.toLowerCase() || '';
+                const pricing = card.querySelector('.price-tag')?.textContent.toLowerCase() || '';
+                
+                if (name.includes(searchTerm) || desc.includes(searchTerm) || 
+                    category.includes(searchTerm) || pricing.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    gsap.from(card, {
+                        opacity: 0,
+                        y: 20,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        /**
+         * Filters the AI tools displayed in the grid by importance rating or favorites.
+         * @param {string} filterType - The filter type ('all', '1', '2', '3', 'favorites').
+         */
+        function filterTools(filterType) {
+            currentFilter = filterType;
+            loadAITools(); // Reloads and filters all tools
+        }
+        
+        /**
+         * Changes the overall theme of the application.
+         * @param {string} theme - The name of the theme to apply (e.g., 'tech', 'nature').
+         */
+        function changeTheme(theme) {
+            document.body.className = `theme-${theme}`;
+            
+            // Update particles color based on selected theme
+            let particleColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
+            let particleLineColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
+            let particleOpacity = 0.5;
+            let particleSize = 3;
+            let particleSpeed = 2;
+            let particleNumber = 80;
+            let particleAnimEnable = false;
+            let particleSizeAnimEnable = false;
+            let interactivityHoverMode = "grab";
+            let interactivityOnClickMode = "push";
+
+            if (theme === 'dynamic') {
+                particleNumber = 100;
+                particleOpacity = 0.7;
+                particleSize = 4;
+                particleSpeed = 3;
+                particleAnimEnable = true;
+                particleSizeAnimEnable = true;
+                interactivityHoverMode = "bubble";
+                interactivityOnClickMode = "repulse";
+
+                // For dynamic theme, particlesJS will handle color animation internally
+                // We set initial color and then let setInterval update it
+                particleColor = "#ff0000"; 
+                particleLineColor = "#ff00ff";
+            }
+
+            // Define the base particles.js configuration
+            const baseParticlesConfig = {
+                "particles": {
+                    "number": {
+                        "value": particleNumber,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": particleColor
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": particleOpacity,
+                        "random": false,
+                        "anim": {
+                            "enable": particleAnimEnable,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": particleSize,
+                        "random": true,
+                        "anim": {
+                            "enable": particleSizeAnimEnable,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": particleLineColor,
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": particleSpeed,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": interactivityHoverMode
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": interactivityOnClickMode
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            };
+
+            // Reinitialize particlesJS with the new configuration
+            particlesJS('particles-js', baseParticlesConfig);
+
+            // Handle dynamic theme color animation for particles
+            if (theme === 'dynamic') {
+                let hue = 0;
+                // Clear previous interval if any to prevent multiple animations
+                if (window.dynamicThemeInterval) {
+                    clearInterval(window.dynamicThemeInterval);
+                    window.dynamicThemeInterval = null; // Clear the interval ID
+                }
+                window.dynamicThemeInterval = setInterval(() => {
+                    hue = (hue + 1) % 360;
+                    const color = `hsl(${hue}, 100%, 50%)`;
+                    // Update particles.js configuration directly
+                    if (window.particlesJS && window.particlesJS.particles) {
+                        window.particlesJS.particles.color.value = color;
+                        window.particlesJS.particles.line_linked.color = color;
+                        window.particlesJS.fn.particlesRefresh(); // Refresh particles to apply new color
+                    }
+                }, 100);
+            } else {
+                if (window.dynamicThemeInterval) {
+                    clearInterval(window.dynamicThemeInterval);
+                    window.dynamicThemeInterval = null;
+                }
+            }
+        }
+        
+        /**
+         * Scrolls the window to the top smoothly.
+         */
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        
+        /**
+         * Toggles the visibility of the "Add Tool" modal.
+         * Optionally, pre-fills the form for editing.
+         * @param {number} [toolIndex] - The index of the tool to edit in `userTools`. If not provided, opens for adding.
+         */
+        function toggleAddToolModal() {
+            const modal = document.getElementById('addToolModal');
+            modal.classList.toggle('active');
+            // Reset form when closing
+            if (!modal.classList.contains('active')) {
+                document.getElementById('toolName').value = '';
+                document.getElementById('toolDescription').value = '';
+                document.getElementById('toolFeatures').value = '';
+                document.getElementById('toolRating').value = '1';
+                document.getElementById('toolUrl').value = '';
+                document.getElementById('toolTutorial').value = '';
+                document.getElementById('toolYoutube').value = '';
+                document.getElementById('toolLogo').value = '';
+                document.getElementById('toolPricing').value = 'Free';
+                document.getElementById('toolCategory').value = 'General';
+                document.getElementById('editToolIndex').value = ''; // Clear edit index
+                document.getElementById('addEditModalTitle').textContent = 'Add Your AI Tool';
+                document.getElementById('saveToolBtn').textContent = 'Add Tool';
+            }
+        }
+
+        /**
+         * Opens the add/edit tool modal and pre-fills it with data if editing an existing tool.
+         * @param {number} [index] - The index of the tool in the `userTools` array to edit.
+         */
+        function openEditToolModal(index) {
+            const tool = userTools[index];
+            if (tool) {
+                document.getElementById('toolName').value = tool.name;
+                document.getElementById('toolDescription').value = tool.description;
+                document.getElementById('toolFeatures').value = tool.features;
+                document.getElementById('toolRating').value = tool.rating;
+                document.getElementById('toolUrl').value = tool.url;
+                document.getElementById('toolTutorial').value = tool.tutorial || '';
+                document.getElementById('toolYoutube').value = tool.youtube || '';
+                document.getElementById('toolLogo').value = tool.logo || '';
+                document.getElementById('toolCategory').value = tool.category;
+                document.getElementById('toolPricing').value = tool.pricing;
+                document.getElementById('editToolIndex').value = index; // Store index for saving
+                document.getElementById('addEditModalTitle').textContent = 'Edit AI Tool';
+                document.getElementById('saveToolBtn').textContent = 'Save Changes';
+                toggleAddToolModal(); // Open the modal
+            }
+        }
+        
+        /**
+         * Adds a new AI tool or saves changes to an existing one based on the form input.
+         */
+        async function saveTool() {
+            const toolNameInput = document.getElementById('toolName');
+            const toolDescriptionInput = document.getElementById('toolDescription');
+            const toolFeaturesInput = document.getElementById('toolFeatures');
+            const toolRatingInput = document.getElementById('toolRating');
+            const toolUrlInput = document.getElementById('toolUrl');
+            const toolTutorialInput = document.getElementById('toolTutorial');
+            const toolYoutubeInput = document.getElementById('toolYoutube');
+            const toolLogoInput = document.getElementById('toolLogo');
+            const toolCategoryInput = document.getElementById('toolCategory');
+            const toolPricingInput = document.getElementById('toolPricing');
+            const editIndexInput = document.getElementById('editToolIndex');
+
+            const tool = {
+                name: toolNameInput.value,
+                description: toolDescriptionInput.value,
+                features: toolFeaturesInput.value,
+                rating: parseInt(toolRatingInput.value),
+                url: toolUrlInput.value,
+                tutorial: toolTutorialInput.value || undefined,
+                youtube: toolYoutubeInput.value || undefined,
+                logo: toolLogoInput.value || undefined,
+                category: toolCategoryInput.value,
+                pricing: toolPricingInput.value
+            };
+            
+            // Basic validation
+            if (!tool.name || !tool.description || !tool.features || !tool.url) {
+                await showCustomDialog('Missing Information', 'Please fill in all required fields: Name, Description, Features, and URL.', 'alert');
+                return;
+            }
+
+            const editIndex = editIndexInput.value;
+            if (editIndex !== '') {
+                // Editing existing tool
+                userTools[editIndex] = { ...userTools[editIndex], ...tool }; // Merge existing with new data
+                localStorage.setItem('userTools', JSON.stringify(userTools));
+                await showCustomDialog('Success!', `"${tool.name}" has been updated.`, 'alert');
+            } else {
+                // Adding new tool
+                userTools.push(tool);
+                localStorage.setItem('userTools', JSON.stringify(userTools));
+                await showCustomDialog('Success!', `"${tool.name}" has been added to your tools.`, 'alert');
+            }
+            
+            toggleAddToolModal(); // Close the modal and reset form
+            loadAITools(); // Reload tools to show the changes
+        }
+        
+        /**
+         * Removes a user-added tool from the list and local storage.
+         * @param {number} index - The index of the tool to remove in the userTools array.
+         */
+        async function removeTool(index) {
+            const toolToRemove = userTools[index];
+            // Remove from favorites if it was favorited
+            if (favoriteToolNames.has(toolToRemove.name)) {
+                favoriteToolNames.delete(toolToRemove.name);
+                saveFavorites();
+            }
+
+            userTools.splice(index, 1);
+            localStorage.setItem('userTools', JSON.stringify(userTools));
+            loadAITools(); // Reload tools after removal
+            await showCustomDialog('Tool Removed', 'The tool has been successfully removed.', 'alert');
+        }
+        
+        // Make search work on Enter key
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchTools();
+            }
+        });
+
+        // Chat functionality
+        /**
+         * Toggles the visibility of the AI chat modal.
+         */
+        function toggleChat() {
+            const modal = document.getElementById('chatModal');
+            modal.classList.toggle('active');
+            // If opening the chat for the first time, add a welcome message to history
+            if (modal.classList.contains('active') && chatHistory.length === 0) {
+                chatHistory.push({ role: "model", parts: [{ text: "Hello! I'm your AI learning assistant. How can I help you today? Try clicking one of the prompts above or ask me anything about AI tools!" }] });
+            }
+        }
+        
+        /**
+         * Sets the chat input value to a predefined prompt.
+         * @param {string} prompt - The prompt text to use.
+         */
+        function usePrompt(prompt) {
+            document.getElementById('chatInput').value = prompt;
+            // If it's a summarize prompt, don't send immediately, let user paste text
+            if (!prompt.startsWith('Summarize:')) {
+                sendMessage();
+            }
+        }
+        
+        /**
+         * Sends a user message to the AI assistant and displays the response.
+         */
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const messages = document.getElementById('chatMessages');
+            
+            if (input.value.trim() === '') return;
+            
+            const userQuestion = input.value;
+            
+            // Add user message to display and chat history
+            const userMsgDiv = document.createElement('div');
+            userMsgDiv.className = 'user-message'; // Use new class for user messages
+            userMsgDiv.innerHTML = `<p>${userQuestion}</p>`;
+            messages.appendChild(userMsgDiv);
+            chatHistory.push({ role: "user", parts: [{ text: userQuestion }] });
+            
+            // Scroll to bottom
+            messages.scrollTop = messages.scrollHeight;
+            
+            // Clear input
+            input.value = '';
+            
+            // Show typing indicator
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = 'ai-message bg-gray-800 rounded-lg p-3 mb-2 max-w-xs'; // Still use ai-message for typing indicator for consistent styling
+            typingIndicator.innerHTML = `
+                <div class="typing-indicator">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            messages.appendChild(typingIndicator);
+            messages.scrollTop = messages.scrollHeight;
+            
+            // Prepare chat history for LLM, including a system instruction
+            const llmChatHistory = [
+                {
+                    role: "user",
+                    parts: [{ text: "You are a helpful AI learning assistant specializing in AI tools for education and productivity. Provide small, simple, and accurate answers. When asked about specific tools, provide general information based on your knowledge, as you don't have access to my local tool data. If the user asks for summarization, provide a concise summary of the text they provide." }]
+                },
+                ...chatHistory // Include actual conversation history
+            ];
+
+            // Call LLM for response
+            try {
+                const payload = { contents: llmChatHistory };
+                const apiKey = ""; // Canvas will provide this at runtime
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                
+                // Remove typing indicator
+                typingIndicator.remove();
+
+                let aiResponseText = "I'm sorry, I couldn't get a response at this moment. Please try again.";
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    aiResponseText = result.candidates[0].content.parts[0].text;
+                }
+                
+                // Add AI message to display and chat history
+                const aiMsgDiv = document.createElement('div');
+                aiMsgDiv.className = 'ai-message bg-gray-800 rounded-lg p-3 mb-2 max-w-xs';
+                aiMsgDiv.innerHTML = `<p>${aiResponseText}</p>`;
+                messages.appendChild(aiMsgDiv);
+                chatHistory.push({ role: "model", parts: [{ text: aiResponseText }] });
+                
+                // Scroll to bottom
+                messages.scrollTop = messages.scrollHeight;
+
+            } catch (error) {
+                console.error("Error calling LLM:", error);
+                // Ensure typing indicator is removed even on error
+                if (typingIndicator.parentNode) {
+                    typingIndicator.remove();
+                }
+
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'ai-message bg-red-800 text-white rounded-lg p-3 mb-2 max-w-xs';
+                errorMsg.innerHTML = `<p>Error: Could not get a response from the AI. Please try again later.</p>`;
+                messages.appendChild(errorMsg);
+                messages.scrollTop = messages.scrollHeight;
+            }
+        }
+        
+        // Make chat input work on Enter key
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        /**
+         * Redirects the user to the specified Google Spreadsheet link.
+         */
+        function redirectToSpreadsheet() {
+            window.open(SHEET_LINK, '_blank');
+        }
+
+        /**
+         * Exports all AI tool data (default and user-added) to the specified Google Sheet.
+         * Requires user authentication via Google Identity Services.
+         */
+        async function exportToGoogleSheets() {
+            if (!gapiInited || !gisInited) {
+                await showCustomDialog('Error', 'Google API libraries not loaded. Please try again.', 'alert');
+                return;
+            }
+
+            try {
+                // Request token for authorization
+                tokenClient.callback = async (resp) => {
+                    if (resp.error) {
+                        throw (resp);
+                    }
+                    await showCustomDialog('Exporting...', 'Preparing data for Google Sheets. Please wait.', 'alert');
+
+                    const allTools = [...aiTools, ...userTools];
+                    const values = [
+                        ["Name", "Description", "Features", "Rating", "URL", "Tutorial", "YouTube Channel", "Logo URL", "Category", "Pricing", "Is Favorite"]
+                    ];
+
+                    allTools.forEach(tool => {
+                        values.push([
+                            tool.name,
+                            tool.description,
+                            tool.features.replace(/\n/g, '; '), // Replace newlines for single cell
+                            tool.rating,
+                            tool.url,
+                            tool.tutorial || '',
+                            tool.youtube || '',
+                            tool.logo || '',
+                            tool.category,
+                            tool.pricing,
+                            favoriteToolNames.has(tool.name) ? 'Yes' : 'No'
+                        ]);
+                    });
+
+                    const resource = {
+                        values,
+                    };
+
+                    try {
+                        const response = await gapi.client.sheets.spreadsheets.values.append({
+                            spreadsheetId: SHEET_ID, // Using the hardcoded SHEET_ID
+                            range: 'Sheet1!A1', // Append starting from A1 of Sheet1
+                            valueInputOption: 'RAW',
+                            resource: resource,
+                        });
+                        console.log('Sheet update response:', response);
+                        await showCustomDialog('Success!', 'AI tool data successfully exported to Google Sheets!', 'alert');
+                    } catch (err) {
+                        console.error('Error appending to sheet:', err);
+                        await showCustomDialog('Error', `Failed to export to Google Sheets: ${err.result ? err.result.error.message : err.message}. Check Spreadsheet ID and permissions.`, 'alert');
+                    }
+                };
+
+                // Prompt for consent to use Google Sheets API
+                if (gapi.client.getToken() === null) {
+                    // No token found, request consent
+                    tokenClient.requestAccessToken({prompt: 'consent'});
+                } else {
+                    // Token exists, use it directly
+                    tokenClient.callback(gapi.client.getToken());
+                }
+
+            } catch (error) {
+                console.error('Error during Google Sheets export process:', error);
+                await showCustomDialog('Error', `An error occurred during export: ${error.message || 'Unknown error'}.`, 'alert');
+            }
+        }
+
+        /**
+         * Clears all user-added tools and favorite data from local storage.
+         */
+        async function clearAllData() {
+            const confirmed = await showCustomDialog(
+                'Clear All Data',
+                'Are you sure you want to clear all user-added tools and favorite data? This action cannot be undone.',
+                'confirm'
+            );
+
+            if (confirmed) {
+                userTools = [];
+                favoriteToolNames.clear();
+                localStorage.removeItem('userTools');
+                localStorage.removeItem('favoriteTools');
+                loadAITools(); // Reload the grid to show cleared state
+                await showCustomDialog('Data Cleared', 'All user data has been successfully cleared.', 'alert');
+            }
+        }
+    </script>
+    <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
+</body>
+</html>

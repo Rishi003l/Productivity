@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planner - Productivity Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <!-- Calendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <!-- Google APIs -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="w-64 bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 transform">
+            <div class="p-4 flex flex-col h-full">
+                <div class="flex items-center justify-between mb-8">
+                    <h1 class="text-2xl font-bold text-primary-600 dark:text-primary-400">Productivity Hub</h1>
+                    <button id="collapse-sidebar" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" disabled aria-busy="true">Loading...</button>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                </div>
+                
+                <nav class="space-y-6 flex-grow">
+                    <div>
+                        <h2 class="text-xs uppercase font-semibold text-gray-500 dark:text-gray-400 mb-2">Essentials</h2>
+                        <ul class="space-y-1">
+                            <li><a href="index.html" class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="fas fa-home w-5"></i><span class="ml-2">Dashboard</span></a></li>
+                            <li><a href="pomodoro-timer.html" class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="fas fa-clock w-5"></i><span class="ml-2">Pomodoro Timer</span></a></li>
+                            <li><a href="todo-list.html" class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="fas fa-tasks w-5"></i><span class="ml-2">To-Do List</span></a></li>
+                            <li><a href="notes.html" class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="fas fa-sticky-note w-5"></i><span class="ml-2">Notes</span></a></li>
+                            <li><a href="planner.html" class="flex items-center p-2 rounded-lg bg-primary-50 text-primary-700 dark:bg-gray-700 dark:text-primary-300"><i class="fas fa-calendar w-5"></i><span class="ml-2">Planner</span></a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h2 class="text-xs uppercase font-semibold text-gray-500 dark:text-gray-400 mb-2">Learning</h2>
+                        <ul class="space-y-1">
+                            <li><a href="learning-hub.html" class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="fas fa-book w-5"></i><span class="ml-2">Learning Hub</span></a></li>
+                            <li><a href="ai-assistant.html" class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="fas fa-robot w-5"></i><span class="ml-2">AI Assistant</span></a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h2 class="text-xs uppercase font-semibold text-gray-500 dark:text-gray-400 mb-2">Progress</h2>
+                        <ul class="space-y-1">
+                            <li><a href="progress-tracker.html" class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="fas fa-chart-line w-5"></i><span class="ml-2">Progress Tracker</span></a></li>
+                            <li><a href="motivation-board.html" class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="fas fa-trophy w-5"></i><span class="ml-2">Motivation Board</span></a></li>
+                        </ul>
+                    </div>
+                </nav>
+                
+                <div class="mt-auto space-y-4">
+                    <!-- Download code button -->
+                    <button id="download-code-btn" class="flex items-center p-2 w-full text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-gray-700 rounded-lg transition">
+                        <i class="fas fa-download w-5"></i>
+                        <span class="ml-2">Download Code (ZIP)</span>
+                    </button>
+                    
+                    <div class="flex items-center justify-between">
+                        <button id="theme-toggle" class="p-2 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                            <i class="fas fa-moon dark:hidden"></i>
+                            <i class="fas fa-sun hidden dark:block"></i>
+                        </button>
+                        
+                        <div class="relative" id="user-menu">
+                            <!-- Google One-Tap Sign In -->
+                            <div id="g_id_onload"
+                                data-client_id="671675605527-8eoq5m2nvp3bkiabicejjolo9fl9lau5.apps.googleusercontent.com"
+                                data-context="signin"
+                                data-ux_mode="popup"
+                                data-callback="handleCredentialResponse"
+                                data-auto_prompt="false">
+                            </div>
+
+                            <div class="g_id_signin" id="googleSignInButton"></div>
+                            
+                            <button id="login-btn" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <div id="user-avatar" class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                                    <i class="fas fa-user text-gray-400 dark:text-gray-500"></i>
+                                </div>
+                                <span id="user-name">Login</span>
+                            </button>
+                            
+                            <!-- User dropdown menu (hidden by default) -->
+                            <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-10 hidden">
+                                <div class="py-1">
+                                    <a href="#" id="profile-link" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <i class="fas fa-user-circle mr-2"></i> Profile
+                                    </a>
+                                    <a href="#" id="settings-link" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <i class="fas fa-cog mr-2"></i> Settings
+                                    </a>
+                                    <a href="#" id="logout-link" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main role="main" class="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900 p-6">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex items-center justify-between mb-6">
+                    <h1 class="text-3xl font-bold flex items-center">
+                        <i class="fas fa-calendar text-indigo-500 mr-3"></i>
+                        Planner
+                    </h1>
+                    <div class="flex space-x-2">
+                        <button id="today-btn" class="px-4 py-2 bg-indigo-100 text-indigo-700 hover:bg-indigo-200 dark:bg-indigo-900 dark:text-indigo-300 dark:hover:bg-indigo-800 rounded-lg transition">
+                            Today
+                        </button>
+                        <div class="bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 py-2 px-3 rounded-lg text-sm font-medium flex items-center">
+                            <i class="fas fa-calendar-check mr-2"></i>
+                            <span id="current-date"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                    <!-- Sidebar -->
+                    <div class="lg:col-span-1 space-y-6">
+                        <!-- Add Event Card -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4">
+                            <h3 class="text-lg font-semibold mb-4 flex items-center">
+                                <i class="fas fa-plus-circle text-indigo-500 mr-2"></i>
+                                Add Event
+                            </h3>
+                            <form id="event-form" class="space-y-4">
+                                <div>
+                                    <label for="event-title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Title</label>
+                                    <input type="text" id="event-title" class="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Event title" required>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label for="event-start" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Start</label>
+                                        <input type="datetime-local" id="event-start" class="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                                    </div>
+                                    <div>
+                                        <label for="event-end" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">End</label>
+                                        <input type="datetime-local" id="event-end" class="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="event-color" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
+                                    <select id="event-color" class="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                        <option value="#4F46E5">Work</option>
+                                        <option value="#10B981">Personal</option>
+                                        <option value="#F59E0B">Meeting</option>
+                                        <option value="#EF4444">Important</option>
+                                        <option value="#8B5CF6">Learning</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="event-description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
+                                    <textarea id="event-description" rows="3" class="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Event details"></textarea>
+                                </div>
+                                <div class="flex justify-end">
+                                    <button type="submit" class="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg transition">
+                                        Add Event
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <!-- Mini Calendar -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4">
+                            <h3 class="text-lg font-semibold mb-4">Calendar</h3>
+                            <div id="mini-calendar" class="text-sm"></div>
+                        </div>
+                        
+                        <!-- Upcoming Events -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4">
+                            <h3 class="text-lg font-semibold mb-4">Upcoming Events</h3>
+                            <div id="upcoming-events" class="space-y-3">
+                                <div class="flex items-start space-x-2">
+                                    <div class="w-3 h-3 rounded-full bg-indigo-500 mt-1.5"></div>
+                                    <div>
+                                        <h4 class="font-medium">Team Meeting</h4>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Today, 10:00 AM - 11:00 AM</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-2">
+                                    <div class="w-3 h-3 rounded-full bg-green-500 mt-1.5"></div>
+                                    <div>
+                                        <h4 class="font-medium">Gym Session</h4>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Today, 5:30 PM - 7:00 PM</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-2">
+                                    <div class="w-3 h-3 rounded-full bg-amber-500 mt-1.5"></div>
+                                    <div>
+                                        <h4 class="font-medium">Project Review</h4>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Tomorrow, 2:00 PM - 3:30 PM</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-2">
+                                    <div class="w-3 h-3 rounded-full bg-purple-500 mt-1.5"></div>
+                                    <div>
+                                        <h4 class="font-medium">Online Course</h4>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">May 21, 7:00 PM - 8:30 PM</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Main Calendar -->
+                    <div class="lg:col-span-3 bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+                        <div id="calendar" class="h-[calc(100vh-200px)]"></div>
+                    </div>
+                </div>
+                
+                <!-- Event Details Modal (hidden by default) -->
+                <div id="event-details-modal" class="hidden fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center z-50">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-lg w-full max-h-[80vh] overflow-hidden">
+                        <div class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700" >
+                            <h3 class="text-xl font-semibold text-white" id="modal-title">Event Details</h3>
+                            <button id="close-event-modal" class="text-white hover:text-gray-200">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="p-6">
+                            <div class="space-y-4">
+                                <div id="modal-time" class="flex items-center text-gray-600 dark:text-gray-300">
+                                    <i class="fas fa-clock mr-2"></i>
+                                    <span>May 19, 2025 • 10:00 AM - 11:00 AM</span>
+                                </div>
+                                <div id="modal-description" class="py-2 text-gray-700 dark:text-gray-300">
+                                    Weekly team meeting to discuss project progress and upcoming milestones.
+                                </div>
+                                
+                                <div class="border-t border-gray-200 dark:border-gray-700 pt-4 flex justify-between">
+                                    <button id="edit-event" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg transition">
+                                        <i class="fas fa-edit mr-2"></i>
+                                        Edit
+                                    </button>
+                                    <button id="delete-event" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition">
+                                        <i class="fas fa-trash mr-2"></i>
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="js/theme.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/oauth.js"></script>
+    <script src="js/sheets-api.js"></script>
+    <script src="js/zip-downloader.js"></script>
+    
+    <script>
+        // Basic Planner functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set current date in header
+            const dateElement = document.getElementById('current-date');
+            const now = new Date();
+            dateElement.textContent = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            
+            // Initialize main calendar
+            const calendarEl = document.getElementById('calendar');
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: [
+                    {
+                        title: 'Team Meeting',
+                        start: '2025-05-19T10:00:00',
+                        end: '2025-05-19T11:00:00',
+                        backgroundColor: '#4F46E5',
+                        borderColor: '#4F46E5'
+                    },
+                    {
+                        title: 'Gym Session',
+                        start: '2025-05-19T17:30:00',
+                        end: '2025-05-19T19:00:00',
+                        backgroundColor: '#10B981',
+                        borderColor: '#10B981'
+                    },
+                    {
+                        title: 'Project Review',
+                        start: '2025-05-20T14:00:00',
+                        end: '2025-05-20T15:30:00',
+                        backgroundColor: '#F59E0B',
+                        borderColor: '#F59E0B'
+                    },
+                    {
+                        title: 'Online Course',
+                        start: '2025-05-21T19:00:00',
+                        end: '2025-05-21T20:30:00',
+                        backgroundColor: '#8B5CF6',
+                        borderColor: '#8B5CF6'
+                    }
+                ],
+                editable: true,
+                selectable: true,
+                selectMirror: true,
+                dayMaxEvents: true,
+                select: function(info) {
+                    // Pre-fill form with selected dates
+                    document.getElementById('event-start').value = formatDateTimeForInput(info.start);
+                    document.getElementById('event-end').value = formatDateTimeForInput(info.end);
+                    
+                    // Focus on title input
+                    document.getElementById('event-title').focus();
+                },
+                eventClick: function(info) {
+                    showEventDetails(info.event);
+                }
+            });
+            
+            calendar.render();
+            
+            // Initialize mini calendar
+            const miniCalendarEl = document.getElementById('mini-calendar');
+            const miniCalendar = new FullCalendar.Calendar(miniCalendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev',
+                    center: 'title',
+                    right: 'next'
+                },
+                height: 'auto',
+                selectable: true,
+                dateClick: function(info) {
+                    calendar.gotoDate(info.date);
+                }
+            });
+            
+            miniCalendar.render();
+            
+            // Format date for input fields
+            function formatDateTimeForInput(date) {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                
+                return `${year}-${month}-${day}T${hours}:${minutes}`;
+            }
+            
+            // Add event form submission
+            const eventForm = document.getElementById('event-form');
+            eventForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const title = document.getElementById('event-title').value;
+                const start = document.getElementById('event-start').value;
+                const end = document.getElementById('event-end').value;
+                const color = document.getElementById('event-color').value;
+                const description = document.getElementById('event-description').value;
+                
+                if (title && start) {
+                    // Add event to calendar
+                    calendar.addEvent({
+                        title: title,
+                        start: start,
+                        end: end,
+                        backgroundColor: color,
+                        borderColor: color,
+                        extendedProps: {
+                            description: description
+                        }
+                    });
+                    
+                    // Clear form
+                    eventForm.reset();
+                    
+                    // Show toast
+                    showToast('Event added successfully!');
+                } else {
+                    showToast('Please enter a title and start time', 'error');
+                }
+            });
+            
+            // Modal handling
+            const modal = document.getElementById('event-details-modal');
+            const closeModal = document.getElementById('close-event-modal');
+            const deleteEventBtn = document.getElementById('delete-event');
+            let currentEvent = null;
+            
+            function showEventDetails(event) {
+                // Store current event for deletion/editing
+                currentEvent = event;
+                
+                // Fill modal with event details
+                document.getElementById('modal-title').textContent = event.title;
+                
+                const startDate = event.start.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+                const startTime = event.start.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+                let timeText = startDate + ' • ' + startTime;
+                
+                if (event.end) {
+                    const endTime = event.end.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+                    timeText += ' - ' + endTime;
+                }
+                
+                document.getElementById('modal-time').innerHTML = '<i class="fas fa-clock mr-2"></i><span>' + timeText + '</span>';
+                
+                // Set description if available
+                const description = event.extendedProps ? event.extendedProps.description : '';
+                document.getElementById('modal-description').textContent = description || 'No description provided.';
+                
+                // Set modal header color based on event color
+                document.querySelector('#event-details-modal .flex').style.backgroundColor = event.backgroundColor;
+                
+                // Show modal
+                modal.classList.remove('hidden');
+            }
+            
+            // Close modal
+            closeModal.addEventListener('click', function() {
+                modal.classList.add('hidden');
+                currentEvent = null;
+            });
+            
+            // Click outside modal to close
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                    currentEvent = null;
+                }
+            });
+            
+            // Delete event
+            deleteEventBtn.addEventListener('click', function() {
+                if (currentEvent) {
+                    if (confirm('Are you sure you want to delete this event?')) {
+                        currentEvent.remove();
+                        modal.classList.add('hidden');
+                        showToast('Event deleted successfully!');
+                        currentEvent = null;
+                    }
+                }
+            });
+            
+            // Today button
+            document.getElementById('today-btn').addEventListener('click', function() {
+                calendar.today();
+            });
+        });
+    </script>
+</body>
+</html>
