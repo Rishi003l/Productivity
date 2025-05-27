@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" lang="en">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,7 +47,7 @@
             <div class="p-4 flex flex-col h-full">
                 <div class="flex items-center justify-between mb-8">
                     <h1 class="text-2xl font-bold text-primary-600 dark:text-primary-400">Productivity Hub</h1>
-                    <button id="collapse-sidebar" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" disabled aria-busy="true">Loading...</button>
+                    <button id="collapse-sidebar" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
                         <i class="fas fa-chevron-left"></i>
                     </button>
                 </div>
@@ -134,7 +134,7 @@
         </aside>
         
         <!-- Main Content -->
-        <main role="main" class="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900 p-6">
+        <main class="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900 p-6">
             <div class="max-w-7xl mx-auto">
                 <div class="flex items-center justify-between mb-6">
                     <h1 class="text-3xl font-bold">Welcome to Productivity Hub</h1>
@@ -172,21 +172,21 @@
                             To-Do List
                         </h2>
                         <div class="flex mb-4">
-                            <input type="text" id="todo-input" class="flex-grow px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-l-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Add a new task..." required>
+                            <input type="text" id="todo-input" class="flex-grow px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-l-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Add a new task...">
                             <button id="add-todo" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-r-lg transition">Add</button>
                         </div>
                         <ul id="todo-list" class="space-y-2 max-h-60 overflow-y-auto">
                             <!-- Tasks will be added here -->
                             <li class="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
                                 <div class="flex items-center">
-                                    <input type="checkbox" class="mr-2 h-4 w-4 text-green-500" required>
+                                    <input type="checkbox" class="mr-2 h-4 w-4 text-green-500">
                                     <span>Complete project proposal</span>
                                 </div>
                                 <button class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
                             </li>
                             <li class="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
                                 <div class="flex items-center">
-                                    <input type="checkbox" class="mr-2 h-4 w-4 text-green-500" required>
+                                    <input type="checkbox" class="mr-2 h-4 w-4 text-green-500">
                                     <span>Review meeting notes</span>
                                 </div>
                                 <button class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
