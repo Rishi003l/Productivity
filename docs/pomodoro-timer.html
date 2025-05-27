@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" lang="en">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,7 +47,7 @@
             <div class="p-4 flex flex-col h-full">
                 <div class="flex items-center justify-between mb-8">
                     <h1 class="text-2xl font-bold text-primary-600 dark:text-primary-400">Productivity Hub</h1>
-                    <button id="collapse-sidebar" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" disabled aria-busy="true">Loading...</button>
+                    <button id="collapse-sidebar" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
                         <i class="fas fa-chevron-left"></i>
                     </button>
                 </div>
@@ -134,7 +134,7 @@
         </aside>
         
         <!-- Main Content -->
-        <main role="main" class="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900 p-6">
+        <main class="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900 p-6">
             <div class="max-w-7xl mx-auto">
                 <div class="flex items-center justify-between mb-6">
                     <h1 class="text-3xl font-bold flex items-center">
@@ -210,7 +210,7 @@
                                     <label for="focus-duration" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Focus Duration</label>
                                     <div class="flex items-center">
                                         <button class="w-8 h-8 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-l-lg border border-gray-300 dark:border-gray-600" id="decrease-focus">-</button>
-                                        <input type="number" id="focus-duration" class="w-16 h-8 text-center border-y border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800" min="1" max="60" value="25" required>
+                                        <input type="number" id="focus-duration" class="w-16 h-8 text-center border-y border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800" min="1" max="60" value="25">
                                         <button class="w-8 h-8 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-r-lg border border-gray-300 dark:border-gray-600" id="increase-focus">+</button>
                                         <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">minutes</span>
                                     </div>
@@ -220,7 +220,7 @@
                                     <label for="short-break" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Short Break</label>
                                     <div class="flex items-center">
                                         <button class="w-8 h-8 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-l-lg border border-gray-300 dark:border-gray-600" id="decrease-short">-</button>
-                                        <input type="number" id="short-break" class="w-16 h-8 text-center border-y border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800" min="1" max="30" value="5" required>
+                                        <input type="number" id="short-break" class="w-16 h-8 text-center border-y border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800" min="1" max="30" value="5">
                                         <button class="w-8 h-8 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-r-lg border border-gray-300 dark:border-gray-600" id="increase-short">+</button>
                                         <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">minutes</span>
                                     </div>
@@ -230,7 +230,7 @@
                                     <label for="long-break" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Long Break</label>
                                     <div class="flex items-center">
                                         <button class="w-8 h-8 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-l-lg border border-gray-300 dark:border-gray-600" id="decrease-long">-</button>
-                                        <input type="number" id="long-break" class="w-16 h-8 text-center border-y border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800" min="1" max="60" value="15" required>
+                                        <input type="number" id="long-break" class="w-16 h-8 text-center border-y border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800" min="1" max="60" value="15">
                                         <button class="w-8 h-8 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-r-lg border border-gray-300 dark:border-gray-600" id="increase-long">+</button>
                                         <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">minutes</span>
                                     </div>
@@ -241,7 +241,7 @@
                                 <label for="pomodoro-count" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Pomodoros until long break</label>
                                 <div class="flex items-center">
                                     <button class="w-8 h-8 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-l-lg border border-gray-300 dark:border-gray-600" id="decrease-count">-</button>
-                                    <input type="number" id="pomodoro-count" class="w-16 h-8 text-center border-y border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800" min="1" max="10" value="4" required>
+                                    <input type="number" id="pomodoro-count" class="w-16 h-8 text-center border-y border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800" min="1" max="10" value="4">
                                     <button class="w-8 h-8 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-r-lg border border-gray-300 dark:border-gray-600" id="increase-count">+</button>
                                     <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">sessions</span>
                                 </div>
@@ -265,7 +265,7 @@
                             </h3>
                             
                             <div class="mb-4">
-                                <input type="text" id="current-task" placeholder="What are you working on?" class="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500" required>
+                                <input type="text" id="current-task" placeholder="What are you working on?" class="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500">
                             </div>
                             
                             <button id="update-task" class="w-full px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg transition">
@@ -355,31 +355,31 @@
                             <div class="h-40 flex items-end space-x-2">
                                 <!-- We'll fill this with JS -->
                                 <div class="flex-1 flex flex-col items-center">
-                                    <div class="w-full bg-primary-100 dark:bg-gray-700 rounded-t" ></div>
+                                    <div class="w-full bg-primary-100 dark:bg-gray-700 rounded-t" class="custom-style"></div>
                                     <span class="text-xs text-gray-500 dark:text-gray-400 mt-1">Mon</span>
                                 </div>
                                 <div class="flex-1 flex flex-col items-center">
-                                    <div class="w-full bg-primary-200 dark:bg-gray-700 rounded-t" ></div>
+                                    <div class="w-full bg-primary-200 dark:bg-gray-700 rounded-t" class="custom-style"></div>
                                     <span class="text-xs text-gray-500 dark:text-gray-400 mt-1">Tue</span>
                                 </div>
                                 <div class="flex-1 flex flex-col items-center">
-                                    <div class="w-full bg-primary-300 dark:bg-gray-700 rounded-t" ></div>
+                                    <div class="w-full bg-primary-300 dark:bg-gray-700 rounded-t" class="custom-style"></div>
                                     <span class="text-xs text-gray-500 dark:text-gray-400 mt-1">Wed</span>
                                 </div>
                                 <div class="flex-1 flex flex-col items-center">
-                                    <div class="w-full bg-primary-400 dark:bg-gray-700 rounded-t" ></div>
+                                    <div class="w-full bg-primary-400 dark:bg-gray-700 rounded-t" class="custom-style"></div>
                                     <span class="text-xs text-gray-500 dark:text-gray-400 mt-1">Thu</span>
                                 </div>
                                 <div class="flex-1 flex flex-col items-center">
-                                    <div class="w-full bg-primary-500 dark:bg-gray-700 rounded-t" ></div>
+                                    <div class="w-full bg-primary-500 dark:bg-gray-700 rounded-t" class="custom-style"></div>
                                     <span class="text-xs text-gray-500 dark:text-gray-400 mt-1">Fri</span>
                                 </div>
                                 <div class="flex-1 flex flex-col items-center">
-                                    <div class="w-full bg-primary-400 dark:bg-gray-700 rounded-t" ></div>
+                                    <div class="w-full bg-primary-400 dark:bg-gray-700 rounded-t" class="custom-style"></div>
                                     <span class="text-xs text-gray-500 dark:text-gray-400 mt-1">Sat</span>
                                 </div>
                                 <div class="flex-1 flex flex-col items-center">
-                                    <div class="w-full bg-primary-300 dark:bg-gray-700 rounded-t-lg" ></div>
+                                    <div class="w-full bg-primary-300 dark:bg-gray-700 rounded-t-lg" class="custom-style"></div>
                                     <span class="text-xs text-gray-500 dark:text-gray-400 mt-1">Sun</span>
                                 </div>
                             </div>
